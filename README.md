@@ -5,5 +5,5 @@
 |--|:--:|
 | Yianna Phaedonos | `s3615301` |
 | Tom Plowman | `s3604589` |
-| James Laine-wyllie | `s3000000` |
+| James Laine-wyllie | `s3607269` |
 | Daniel Linford | `s3661720` |
