@@ -1,12 +1,20 @@
 import MySQLdb
 import json
+import datetime
+from googleapiclient.discovery import build
+from httplib2 import Http
+from oauth2client import file, client, tools
 
 
 class GoogleDatabaseAPI:
+    """"
+    Class for handling API calls to the Google cloud database
+
+    """
     def __init__(self):
         """
-        Constructor for google database API
-        Reads config file for database details
+        Constructor for google database API.
+        Reads config file for database details.
 
         """
         # Load config file to get database details
@@ -48,43 +56,48 @@ class GoogleDatabaseAPI:
                 cursor.execute(query, parameters)
             return cursor.fetchall()
 
-    def create_borrow_event(self, bookID, userID):
+    def create_borrow_entry(self, bookID, username):
         """
         Create a borrow entry for a given book in database
 
         Args:
             bookID (str): ID of the book to create borrow entry for
-            userID (str): ID of user that will be borrowing the book
+            username (str): Username of user that will be borrowing the book
+
+        Returns:
+            The generated ID for the book borrow entry
 
         """
         # Define insert statement
-        query = "INSERT INTO BookBorrow (LmsUserID, BookID, Status, BorrowedDate) \
+        query = "INSERT INTO BookBorrowed (UserName, BookID, Status, BorrowedDate) \
                  VALUES (%s, %s, \"borrowed\", CURDATE())"
-        parameters = (userID, bookID)
+        parameters = (username, bookID)
         # Create borrowed entry in book borrow table
+        with self.__connection.cursor() as cursor:
+            cursor.execute(query, parameters)
+            book_borrow_ID = cursor.lastrowid
+        # Commit changes
+        self.__connection.commit()
+        # Return the ID of the borrowed book
+        return book_borrow_ID
+
+    def return_borrow_entry(self, book_borrowed_ID):
+        """
+        Update a borrow entry status field to "returned"
+
+        Args:
+            book_borrowed_ID (str): ID of borrow event to update
+
+        """
+        # Define update statement
+        query = "UPDATE BookBorrowed SET \"Status\" = \"Returned\" \
+                 WHERE \"BookBorrowedID\" = %s"
+        parameters = (book_borrowed_ID)
+        # Update borrowed entry in book borrow table
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
         # Commit changes
         self.__connection.commit()
-
-    def get_userID(user_name):
-        """
-        Queries and returns the ID of the user by their name
-
-        Args:
-            user_name (str): The username of the user
-
-        Returns:
-            str: ID of the given user
-
-        """
-        # Define query
-        query = "SELECT LmsUserID FROM LmsUser WHERE UserName = %s"
-        parameters = (user_name)
-        # Execute query and get result
-        with self.__connection.cursor() as cursor:
-            cursor.execute(query, parameters)
-            return cursor.fetchone()[0]
 
     def check_book_exists(self, bookID):
         """
@@ -110,7 +123,7 @@ class GoogleDatabaseAPI:
         else:
             return True
 
-    def check_book_available(self, bookID):
+    def check_book_borrowed(self, bookID):
         """
         Queries the database to check if the book is not currently borrowed.
 
@@ -118,19 +131,90 @@ class GoogleDatabaseAPI:
             bookID (str): The ID of the book to check
 
         Returns:
-            bool: True if book is not borrowed, False if book is borrowed.
+            True and BookBorrowID if book is currently borrowed.
+            False and None if book is not currently borrowed.
 
         """
         # Define query
-        query = "SELECT Status FROM BookBorrowed WHERE BookID = %s AND BookBorrowedID in \
-            (SELECT MAX(BookBorrowedID) FROM BookBorrowed GROUP BY BookID)"
+        query = "SELECT Status FROM BookBorrowed WHERE BookID = %s \
+                 AND Status = \"borrowed\""
         parameters = (bookID)
         # Execute query and get result
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
             result = cursor.fetchone()
         # Return whether or not the book is currently borrowed
-        if(result is None or result[0] == "borrowed"):
-            return False
-        else:
+        if(result is None):
             return True
+        else:
+            return False
+
+
+class GoogleCalendarAPI:
+    """
+    Class for handling operations with google calendar.
+
+    """
+    def __init__(self):
+        """
+        Constructor for google calendar API.
+        Loads necessary configuration files for accessing a user's calendar.
+
+        """
+        # Load token for Google calendar API
+        scope = "https://www.googleapis.com/auth/calendar"
+        store = file.Storage("token.json")
+        creds = store.get()
+        # If token file does not exist or is invalid, run through API setup
+        if(not creds or creds.invalid):
+            flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
+            creds = tools.run_flow(flow, store)
+        # Builds API service
+        self.__service = build("calendar", "v3", http=creds.authorize(Http()))
+
+    def add_borrow_event(self, book_borrow_ID, bookID, username):
+        """
+        Adds a new borrow calendar event for a borrowed book.
+
+        Args:
+            book_borrow_ID (str): ID that will be inlcuded in event ID
+            bookID (str): ID of the book that is being borrowed
+            username (str): Username of the user borrowing the book
+
+        """
+        # Define return date of book seven days from now
+        return_date = (datetime.now() + datetime.timedelta(days=7))
+        # Create event with details of borrowing including book ID and user
+        event = {
+            "summary": "Book %s borrowed" % str(bookID),
+            "location": "RMIT PIoT Library",
+            "description": "A book with an ID number of %s has \
+                            been borrowed by %s and is due to be returned \
+                            by this date." % (str(bookID), str(username))
+            "start": {
+                "dateTime": return_date.strftime("%Y-%m-%d"),
+                "timeZone": "Australia/Melbourne",
+            },
+            "end": {
+                "dateTime": return_date.strftime("%Y-%m-%d"),
+                "timeZone": "Australia/Melbourne",
+            }
+        }
+        # Generate event ID with "bookBorrow" appended with GDB entry ID
+        eventID = "bookBorrow%s" % book_borrow_ID
+        # Insert calendar event into calendar
+        self.__service.events().insert(
+            calendarId="primary", eventId=eventID, body=event).execute()
+
+    def remove_borrow_event(self, book_borrowed_ID):
+        """
+        Removes an existing borrow calendar event for a book.
+
+        Args:
+            book_borrowed_ID (str): ID of the book borrow entry in GDB
+
+        """
+        # Generate event ID of calendar event for borrowed book
+        eventID = "bookBorrow%s" % book_borrow_ID
+        # Delete calendar event for borrowed book
+        self.__service.events().delete(calendarId="primary", eventId=eventID)

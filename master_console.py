@@ -20,8 +20,10 @@ class MasterConsole:
         """
         # Specify port to lisetn on
         self.__listen_port = listen_port
-        # Load google database api
+        # Load google database API
         self.__gdb = database_api.GoogleDatabaseAPI()
+        # Load google calendar API
+        self.__gc = database_api.GoogleCalendarAPI()
 
     def connect_to_reception(self):
         """
@@ -42,22 +44,22 @@ class MasterConsole:
                 # the user then sending a logoff message once user logs off
                 while True:
                     print("Waiting for user to connect...")
-                    user_name = conn.recv(4096).decode()
-                    self.display_console(user_name)
+                    username = conn.recv(4096).decode()
+                    self.display_console(username)
                     conn.sendall("logoff".encode())
 
-    def display_console(self, user_name):
+    def display_console(self, username):
         """
         Displays console menu and gets an option from user.
 
 
         Args:
-            user_name (str): Username of the connected user.
+            username (str): Username of the connected user.
 
         """
         while True:
             # Display menu
-            print("Hello %s" % user_name)
+            print("Hello %s" % username)
             print("Select an option:")
             print("1. Search a book")
             print("2. Borrow a book")
@@ -74,7 +76,7 @@ class MasterConsole:
                     self.search_books()
                 elif(opt == "2"):
                     # Let user borrow book
-                    self.borrow_books(user_name)
+                    self.borrow_books(username)
                 elif(opt == "3"):
                     # Let user return book
                     self.return_books()
@@ -169,36 +171,33 @@ class MasterConsole:
         else:
             print("No books were found with this filter.")
 
-    def borrow_books(self, user_name):
+    def borrow_books(self, username):
         """
         Asks user for the id of the book they wish to borrow,
         creates a borrow event in database and creates a
         calendar event for the borrowed book.
 
         Args:
-            user_name (str): Username of the user borrowing the book
-
-        TODO: Add calendar event creation
+            username (str): Username of the user borrowing the book
 
         """
         # Ask the user for the ID of the book they would like to borrow
-        id = input("Enter the ID of book you would like to borrow: ")
+        bookID = input("Enter the ID of book you would like to borrow: ")
         # Check that a book with that ID exists
-        if(self.__gdb.check_book_exists(id)):
+        if(self.__gdb.check_book_exists(bookID)):
             # Inform the user that the book does not exist
             print("Book with given ID does not exist.")
         else:
             # Check if the book has been borrowed and not yet returned
-            if(self.__gdb.check_book_available(id)):
+            borrowed, book_borrowed_ID = self.__gdb.check_book_borrowed(bookID)
+            if(borrowed):
                 # Inform the user the book has already been borrowed
                 print("This book has already been borrowed.")
             else:
-                # Get user id of user
-                userID = self.__gdb.get_userID(user_name)
-                # Insert borrow event into database
-                self.__gdb.create_borrow_event(userID)
-                # Create borrow event in calendar TODO
-                pass
+                # Insert borrow entry into database and get its ID
+                book_borrowed_ID = self.__gdb.create_borrow_entry(username)
+                # Create borrow event in calendar
+                self.__gc.add_borrow_event(book_borrowed_ID, bookID, username)
 
         # Ask the user if they would like to borrow another book
         while True:
@@ -218,10 +217,35 @@ class MasterConsole:
         updates the corresponding borrow database entry and
         deletes the corresponding calendar event.
 
-        TODO
 
         """
-        pass
+        # Ask the user for the ID of the book they are returning
+        bookID = print("Enter the ID of the book you are returning: ")
+        # Check that a book with that ID exists
+        if(self.__gdb.check_book_exists(bookID)):
+            # Inform the user that the book does not exist
+            print("Book with given ID does not exist.")
+        else:
+            # Check if the book has been borrowed and not yet returned
+            borrowed, book_borrowed_ID = self.__gdb.check_book_borrowed(bookID)
+            if(borrowed):
+                # Update the borrowed book database entry status
+                self.__gdb.return_borrow_entry(book_borrowed_ID)
+            else:
+                # Inform the user this book has not been borrowed
+                print("This book is not currently borrowed.")
+
+        # Ask the user if they would like to return another book
+        while True:
+            response = input("Would you like to return another book?(Y/N): ")
+            if(response.upper() == "Y"):
+                # Recursively calls return books again
+                self.return_books()
+                return
+            elif(response.upper() == "N"):
+                return
+            else:
+                print("Invalid option.")
 
     @staticmethod
     def valid_date(date)
