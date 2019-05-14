@@ -9,7 +9,7 @@ class MasterConsole:
 
     """
 
-    def __init__(self, listen_port):
+    def __init__(self, listen_port=65000):
         """
         Constructor for master console.
 
@@ -40,18 +40,25 @@ class MasterConsole:
             # Accept the connection from reception pi
             conn, addr = sock.accept()
             with conn:
-                # Continuously loop getting username from reception, handling
+                # Continuously loop getting user info from reception, handling
                 # the user then sending a logoff message once user logs off
                 while True:
                     print("Waiting for user to connect...")
+                    # Receive username and user's name
                     username = conn.recv(4096).decode()
-                    self.display_console(username)
+                    name = conn.recv(4096).decode()
+                    # Add user details to database if this their first login
+                    userID = self.__gdb.get_userID_by_Username(username)
+                    if(not userID):
+                        self.__gdb.add_user(username, name)
+                    # Display console
+                    self.display_console(userID, username, name)
+                    # Send logoff message
                     conn.sendall("logoff".encode())
 
-    def display_console(self, username):
+    def display_console(self, userID, username, name):
         """
         Displays console menu and gets an option from user.
-
 
         Args:
             username (str): Username of the connected user.
@@ -59,7 +66,7 @@ class MasterConsole:
         """
         while True:
             # Display menu
-            print("Hello %s" % username)
+            print("Hello %s" % name)
             print("Select an option:")
             print("1. Search a book")
             print("2. Borrow a book")
@@ -76,7 +83,7 @@ class MasterConsole:
                     self.search_books()
                 elif(opt == "2"):
                     # Let user borrow book
-                    self.borrow_books(username)
+                    self.borrow_books(userID)
                 elif(opt == "3"):
                     # Let user return book
                     self.return_books()
@@ -171,7 +178,7 @@ class MasterConsole:
         else:
             print("No books were found with this filter.")
 
-    def borrow_books(self, username):
+    def borrow_books(self, userID):
         """
         Asks user for the id of the book they wish to borrow,
         creates a borrow event in database and creates a
@@ -195,7 +202,7 @@ class MasterConsole:
                 print("This book has already been borrowed.")
             else:
                 # Insert borrow entry into database and get its ID
-                book_borrowed_ID = self.__gdb.create_borrow_entry(username)
+                book_borrowed_ID = self.__gdb.create_borrow_entry(userID)
                 # Create borrow event in calendar
                 self.__gc.add_borrow_event(book_borrowed_ID, bookID, username)
 

@@ -28,6 +28,54 @@ class GoogleDatabaseAPI:
         # Create connection to database
         self.__connection = MySQLdb.connect(host, user, password, database)
 
+    def get_userID_by_username(username):
+        """
+        Queries the database for a user by the given name and gets their ID
+
+        Args:
+            username (str): Username of the user to get ID of
+
+        Returns:
+            The ID of the given user if they exits, None otherwise.
+
+        """
+        # Define insert statement
+        query = "SELECT UserID FROM User WHERE UserName = %s"
+        parameters = (username, name)
+        # Execute query and get result
+        with self.__connection.cursor() as cursor:
+            cursor.execute(query, parameters)
+            result = cursor.fetchone()
+        # Return the ID if the user exists, None otherwise
+        if(result is None):
+            return None
+        else:
+            return result[0]
+
+    def add_user(username, name):
+        """
+        Adds a new user to the database with given username and name
+
+        Args:
+            username (str): Username of the user
+            name (str): Name of the user
+        
+        Returns:
+            The ID of the newly added user
+
+        """
+        # Define query
+        query = "INSERT INTO User (UserName, Name) VALUES (%s, %s)"
+        parameters = (username, name)
+        # Create user in user table
+        with self.__connection.cursor() as cursor:
+            cursor.execute(query, parameters)
+            userID = cursor.lastrowid
+        # Commit changes
+        self.__connection.commit()
+        # Return the ID of the new user
+        return userID
+
     def search_books(self, clause=None, parameters=None):
         """
         Search the books table with given WHERE clause and parameters and
@@ -56,22 +104,22 @@ class GoogleDatabaseAPI:
                 cursor.execute(query, parameters)
             return cursor.fetchall()
 
-    def create_borrow_entry(self, bookID, username):
+    def create_borrow_entry(self, bookID, userID):
         """
         Create a borrow entry for a given book in database
 
         Args:
             bookID (str): ID of the book to create borrow entry for
-            username (str): Username of user that will be borrowing the book
+            userID (str): ID of user that will be borrowing the book
 
         Returns:
             The generated ID for the book borrow entry
 
         """
         # Define insert statement
-        query = "INSERT INTO BookBorrowed (UserName, BookID, Status, BorrowedDate) \
+        query = "INSERT INTO BookBorrowed (UserID, BookID, Status, BorrowedDate) \
                  VALUES (%s, %s, \"borrowed\", CURDATE())"
-        parameters = (username, bookID)
+        parameters = (userID, bookID)
         # Create borrowed entry in book borrow table
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
