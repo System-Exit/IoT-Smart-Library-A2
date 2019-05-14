@@ -2,6 +2,7 @@ import library_user
 import hashlib
 import local_database
 import os
+import re
 
 LOCAL_DB_NAME = "library_user_database"
 
@@ -49,7 +50,12 @@ def new_user_details():
     last_name = input("Please Enter Your Last Name: ").capitalize()
 
     #Email must be passed through regex
-    email = input("Please Enter Your Email: ")
+    while True:
+        email = input("Please Enter Your Email: ")
+        if(re.match(r"[^@]+@[^@]+\.[^@]+", email)):
+            break
+        else:
+            print("Email not valid: Please try again...")
 
     #Must scan database to ensure username is unique
     username = input("Please Enter Desired Username: ")
