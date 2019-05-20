@@ -238,7 +238,7 @@ class GoogleCalendarAPI:
             "location": "RMIT PIoT Library",
             "description": "A book with an ID number of %s has \
                             been borrowed by %s and is due to be returned \
-                            by this date." % (str(bookID), str(username))
+                            by this date." % (str(bookID), str(username)),
             "start": {
                 "dateTime": return_date.strftime("%Y-%m-%d"),
                 "timeZone": "Australia/Melbourne",
