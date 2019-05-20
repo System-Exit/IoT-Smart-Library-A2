@@ -255,27 +255,27 @@ class MasterConsole:
                 print("Invalid option.")
 
     @staticmethod
-    def valid_date(date)
-    """
-    Checks if given date is valid and returns true if so, false if not.
+    def valid_date(date):
+        """
+        Checks if given date is valid and returns true if so, false if not.
 
-    Args:
-        date (str): String of date in the format of YYYY-MM-DD.
+        Args:
+            date (str): String of date in the format of YYYY-MM-DD.
 
-    Returns:
-        Whether or not the date is valid.
+        Returns:
+            Whether or not the date is valid.
 
-    """
-    # Split date into year, month and day
-    year, month, day = date.split("-")
-    try:
-        # Attempt to parse the date
-        datetime.datetime(int(year), int(month), int(day))
-    except ValueError:
-        # Parse failed, so return false
-        return False
-    # Parse was successful, so return true
-    return True
+        """
+        # Split date into year, month and day
+        year, month, day = date.split("-")
+        try:
+            # Attempt to parse the date
+            datetime.datetime(int(year), int(month), int(day))
+        except ValueError:
+            # Parse failed, so return false
+            return False
+        # Parse was successful, so return true
+        return True
 
 # Starts the Master Pi Console
 if __name__ == "__main__":
