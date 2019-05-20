@@ -47,25 +47,24 @@ class LocalDatabase:
                 return 1
         connection.close()
 
-    #Returns True if username and password match, False otherwise
+    #Returns the user if the entered username and password is a match
     def verify_login(self, username, password):
         connection = sqlite3.connect(self.name)
+        connection.row_factory = sqlite3.Row
 
         with connection:
             cursor = connection.cursor()
 
-            row = cursor.execute(
-                """SELECT COUNT(*) FROM users
+            cursor.execute(
+                """SELECT * FROM users
                 WHERE (username = :username) AND (password = :password)""", {"username": username, "password": password}
             )
 
-            for row in cursor:
-                count_result = row[0]
+            row = cursor.fetchone()
 
-            #A match has been found, login details have been confirmed
-            if count_result is 1:
-                return True
-            
-            else:
-                return False
         connection.close()
+
+        if row is not None:
+            return { "username": row["username"], "firstname": row["f_name"], "lastname": row["l_name"], "email": row["email"] }
+        else:
+            return False
