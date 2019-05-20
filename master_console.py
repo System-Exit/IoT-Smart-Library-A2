@@ -1,5 +1,5 @@
 import socket
-import database_api
+import google_api
 import datetime
 
 
@@ -21,9 +21,9 @@ class MasterConsole:
         # Specify port to lisetn on
         self.__listen_port = listen_port
         # Load google database API
-        self.__gdb = database_api.GoogleDatabaseAPI()
+        self.__gdb = google_api.GoogleDatabaseAPI()
         # Load google calendar API
-        self.__gc = database_api.GoogleCalendarAPI()
+        self.__gc = google_api.GoogleCalendarAPI()
 
     def connect_to_reception(self):
         """
