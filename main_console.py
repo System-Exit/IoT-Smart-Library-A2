@@ -5,11 +5,16 @@ import os
 import re
 import sys
 import socket
+import json
 sys.path.append("..")
 import socket_utils
 
 LOCAL_DB_NAME = "library_user_database"
-HOSTNAME = "127.0.0.1"
+
+with open("config.json", "r") as file:
+    data = json.load(file)
+
+HOSTNAME = data["MasterPi_IP"]
 PORT = 65000
 ADDRESS = (HOSTNAME, PORT)
 
@@ -102,7 +107,7 @@ class ReceptionConsole:
             password = self.password_encryption(password)
 
             db = local_database.LocalDatabase(LOCAL_DB_NAME)
-            
+
             user = db.verify_login(username, password)
             if user is not False:
                 self.send_request(user)
