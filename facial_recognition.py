@@ -2,7 +2,9 @@ import cv2
 import face_recognition
 import pickle
 import os
+import time
 from imutils import paths
+from imutils.video import VideoStream
 
 
 class Facial_recognition:
@@ -36,6 +38,72 @@ class Facial_recognition:
         # Specify detection method for facial detection
         self.__detect_model = detect_model
 
+    def recognize_user(self):
+        """
+        Recognizes an individual with a webcam and returns their username.
+        Requires that a user has registered with facial recognition.
+
+        Returns:
+            If user is recognized, returns their username.
+            If user is recognized as unknown too many times, returns None.
+
+        """
+        # Load registered faces encodings file
+        data = pickle.loads(open(self.__encodings_path, "rb").read())
+        # Initialize video stream and wait for it to warm up
+        vs = VideoStream(src=0).start()
+        time.sleep(2)
+        # Loop over video stream and look for faces in the video stream
+        unknown_count = 0
+        while True:
+            # Capture frame
+            frame = vs.read()
+            # Convert frame from BGR to RBG
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # Resize frame for faster processing
+            rgb_frame = imutils.resize(frame, width=240)
+            # Get bounding boxes for each face in the frame
+            boxes = face_recognition.face_locations(rgb_frame,
+                                                    model=self.__detect_model)
+            # Compute facial embeding for faces
+            encodings = face_recognition.face_encodings(rgb_frame, boxes)
+            # Initialize names list for frame
+            names = []
+            # Check each encoding for matches to existing encodings
+            for encoding in encodings:
+                matches = face_recognition.compare_faces(
+                    data["encodings"], encoding)
+                name = "Unknown"
+                # Check if there is a match
+                if True in matches:
+                    # Find all matching indexes and initialize dictionary for
+                    # number of times a face in the encoded frame is matched
+                    matchedIndexes = [i for (i, b) in enumerate(matches) if b]
+                    counts = {}
+                    # Loop over matched indexes and count face recognitions
+                    for i in matchedIndexes:
+                        name = data["names"][i]
+                        counts[name] = counts.get(name, 0) + 1
+                    # Determine recognized face with largest count of 
+                    # recognitions or "votes"
+                    name = max(counts, key=counts.get)
+                # Update name list
+                names.append(name)
+            # Check each name in names list
+            for name in names:
+                # If they are named as unknown, increment the unknown counter
+                if name is "Unknown":
+                    unknown_count += 1
+                # If they are as any other user, immediately return that user
+                else:
+                    return name
+            # If unknown count has reached the limit, simply return None
+            if unknown_count >= 10:
+                return None
+
+                
+
+    
     def register_user(self, username):
         """
         Registers a user in the facial recognition database.
@@ -79,7 +147,7 @@ class Facial_recognition:
         camera.release()
         # Do encoding of all images
         self.encode_images()
-
+    
     def encode_images(self):
         """
         Encodes all existing images to a pickle file.
@@ -106,7 +174,7 @@ class Facial_recognition:
             for encoding in encodings:
                 allEncodings.append(encoding)
                 allNames.append(name)
-        # Dump facial encodings to pickle file
+        # Dump facial encodings to encodings file
         data = {"encodings": allEncodings, "names": allNames}
         with open(self.__encodings_path, "wb") as encode_file:
             encode_file.write(pickle.dumps(data))
