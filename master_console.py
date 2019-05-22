@@ -39,7 +39,9 @@ class MasterConsole:
             sock.listen()
 
             # Accept the connection from reception pi
+            print("Waiting for Reception Pi to connect...")
             conn, addr = sock.accept()
+            print("Reception PI has connected!")
             with conn:
                 # Continuously loop getting user info from reception, handling
                 # the user then sending a logoff message once user logs off
@@ -57,7 +59,7 @@ class MasterConsole:
                     # Display console
                     self.display_console(userID, username, first_name)
                     # Send logoff message
-                    conn.sendall("logoff".encode())
+                    socket_utils.sendJson(conn, {"logout": "true", })
 
     def display_console(self, userID, username, name):
         """
