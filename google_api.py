@@ -160,7 +160,7 @@ class GoogleDatabaseAPI:
 
         """
         # Define query
-        query = "SELECT * FROM Books WHERE BookID = %s"
+        query = "SELECT * FROM Book WHERE BookID = %s"
         parameters = [bookID]
         # Execute query and get result
         with self.__connection.cursor() as cursor:
