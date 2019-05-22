@@ -84,7 +84,7 @@ class Facial_recognition:
                     for i in matchedIndexes:
                         name = data["names"][i]
                         counts[name] = counts.get(name, 0) + 1
-                    # Determine recognized face with largest count of 
+                    # Determine recognized face with largest count of
                     # recognitions or "votes"
                     name = max(counts, key=counts.get)
                 # Update name list
@@ -101,9 +101,6 @@ class Facial_recognition:
             if unknown_count >= 10:
                 return None
 
-                
-
-    
     def register_user(self, username):
         """
         Registers a user in the facial recognition database.
@@ -147,7 +144,7 @@ class Facial_recognition:
         camera.release()
         # Do encoding of all images
         self.encode_images()
-    
+
     def encode_images(self):
         """
         Encodes all existing images to a pickle file.
