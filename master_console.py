@@ -1,6 +1,7 @@
 import socket
 import google_api
 import datetime
+import socket_utils
 
 
 class MasterConsole:
@@ -45,14 +46,16 @@ class MasterConsole:
                 while True:
                     print("Waiting for user to connect...")
                     # Receive username and user's name
-                    username = conn.recv(4096).decode()
-                    name = conn.recv(4096).decode()
+                    data = socket_utils.recvJson(conn)
+                    username = data["username"]
+                    first_name = data["firstname"]
+                    last_name = data["lastname"]
                     # Add user details to database if this their first login
-                    userID = self.__gdb.get_userID_by_Username(username)
+                    userID = self.__gdb.get_userID_by_username(username)
                     if(not userID):
-                        self.__gdb.add_user(username, name)
+                        self.__gdb.add_user(username, first_name, last_name)
                     # Display console
-                    self.display_console(userID, username, name)
+                    self.display_console(userID, username, first_name)
                     # Send logoff message
                     conn.sendall("logoff".encode())
 
@@ -118,12 +121,12 @@ class MasterConsole:
                 # Have user enter title to search by
                 title = input("Enter partial or full book title: ")
                 clause += "Title LIKE %%%s%%"
-                values = (title)
+                values = [title]
             elif(opt == "2"):
                 # Have user enter author to search by
                 author = input("Enter partial or full author name: ")
                 clause += "Author LIKE %%%s%%"
-                values = (author)
+                values = [author]
             elif(opt == "3"):
                 # Have user enter date range to search by
                 valid_input = False
@@ -145,12 +148,12 @@ class MasterConsole:
                 clause += "PublishedDate BETWEEN \
                           CAST(%s AS DATE) AND \
                           CAST(%s AS DATE)"
-                values = (date_range_low, date_range_high)
+                values = [date_range_low, date_range_high]
             elif(opt == "4"):
                 # Have user enter book ID to search by
                 book_id = input("Enter ID of book: ")
                 clause += "BookID = %s"
-                values = (book_id)
+                values = [book_id]
             else:
                 print("Invalid option.")
                 opt = None

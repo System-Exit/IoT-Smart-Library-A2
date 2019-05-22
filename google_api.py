@@ -28,7 +28,7 @@ class GoogleDatabaseAPI:
         # Create connection to database
         self.__connection = MySQLdb.connect(host, user, password, database)
 
-    def get_userID_by_username(username):
+    def get_userID_by_username(self, username):
         """
         Queries the database for a user by the given name and gets their ID
 
@@ -41,7 +41,7 @@ class GoogleDatabaseAPI:
         """
         # Define insert statement
         query = "SELECT UserID FROM User WHERE UserName = %s"
-        parameters = (username)
+        parameters = [username]
         # Execute query and get result
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
@@ -52,7 +52,7 @@ class GoogleDatabaseAPI:
         else:
             return result[0]
 
-    def add_user(username, first_name, last_name):
+    def add_user(self, username, first_name, last_name):
         """
         Adds a new user to the database with given username and name
 
@@ -67,7 +67,7 @@ class GoogleDatabaseAPI:
         """
         # Define query
         query = "INSERT INTO User (UserName, FName, LName) VALUES (%s, %s, %s)"
-        parameters = (username, first_name, last_name)
+        parameters = [username, first_name, last_name]
         # Create user in user table
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
@@ -85,7 +85,7 @@ class GoogleDatabaseAPI:
         Args:
             clause (:obj: `str`, optional): WHERE clause in SQL syntax that
                 the clause will use. Default is none.
-            parameters (:obj:`tuple` of :obj:`str`, optional):
+            parameters (:obj:`list` of :obj:`str`, optional):
                 The parameters of a parameterized query. Default is none.
 
         Returns:
@@ -120,7 +120,7 @@ class GoogleDatabaseAPI:
         # Define insert statement
         query = "INSERT INTO BookBorrowed (UserID, BookID, Status, BorrowedDate) \
                  VALUES (%s, %s, \"borrowed\", CURDATE())"
-        parameters = (userID, bookID)
+        parameters = [userID, bookID]
         # Create borrowed entry in book borrow table
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
@@ -141,7 +141,7 @@ class GoogleDatabaseAPI:
         # Define update statement
         query = "UPDATE BookBorrowed SET \"Status\" = \"Returned\" \
                  WHERE \"BookBorrowedID\" = %s"
-        parameters = (book_borrowed_ID)
+        parameters = [book_borrowed_ID]
         # Update borrowed entry in book borrow table
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
@@ -161,7 +161,7 @@ class GoogleDatabaseAPI:
         """
         # Define query
         query = "SELECT * FROM Books WHERE BookID = %s"
-        parameters = (bookID)
+        parameters = [bookID]
         # Execute query and get result
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
@@ -187,7 +187,7 @@ class GoogleDatabaseAPI:
         # Define query
         query = "SELECT Status FROM BookBorrowed WHERE BookID = %s \
                  AND Status = \"borrowed\""
-        parameters = (bookID)
+        parameters = [bookID]
         # Execute query and get result
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
@@ -216,7 +216,7 @@ class GoogleCalendarAPI:
         creds = store.get()
         # If token file does not exist or is invalid, run through API setup
         if(not creds or creds.invalid):
-            flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
+            flow = client.flow_from_clientsecrets("credentials.json", scope)
             creds = tools.run_flow(flow, store)
         # Builds API service
         self.__service = build("calendar", "v3", http=creds.authorize(Http()))
