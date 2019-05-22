@@ -41,7 +41,7 @@ class GoogleDatabaseAPI:
         """
         # Define insert statement
         query = "SELECT UserID FROM User WHERE UserName = %s"
-        parameters = (username, name)
+        parameters = (username)
         # Execute query and get result
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
@@ -52,21 +52,22 @@ class GoogleDatabaseAPI:
         else:
             return result[0]
 
-    def add_user(username, name):
+    def add_user(username, first_name, last_name):
         """
         Adds a new user to the database with given username and name
 
         Args:
             username (str): Username of the user
-            name (str): Name of the user
-        
+            first_name (str): First name of the user
+            last_name (str): Last name of the user
+
         Returns:
             The ID of the newly added user
 
         """
         # Define query
-        query = "INSERT INTO User (UserName, Name) VALUES (%s, %s)"
-        parameters = (username, name)
+        query = "INSERT INTO User (UserName, FName, LName) VALUES (%s, %s, %s)"
+        parameters = (username, first_name, last_name)
         # Create user in user table
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
