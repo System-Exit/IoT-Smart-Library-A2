@@ -1,6 +1,7 @@
 import socket
 import google_api
 import datetime
+import socket_utils
 
 
 class MasterConsole:
@@ -45,14 +46,16 @@ class MasterConsole:
                 while True:
                     print("Waiting for user to connect...")
                     # Receive username and user's name
-                    username = conn.recv(4096).decode()
-                    name = conn.recv(4096).decode()
+                    data = socket_utils.recvJson(conn)
+                    username = data["username"]
+                    first_name = data["firstname"]
+                    last_name = data["lastname"]
                     # Add user details to database if this their first login
                     userID = self.__gdb.get_userID_by_Username(username)
                     if(not userID):
-                        self.__gdb.add_user(username, name)
+                        self.__gdb.add_user(username, first_name, last_name)
                     # Display console
-                    self.display_console(userID, username, name)
+                    self.display_console(userID, username, first_name)
                     # Send logoff message
                     conn.sendall("logoff".encode())
 

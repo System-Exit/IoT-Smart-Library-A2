@@ -216,7 +216,7 @@ class GoogleCalendarAPI:
         creds = store.get()
         # If token file does not exist or is invalid, run through API setup
         if(not creds or creds.invalid):
-            flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
+            flow = client.flow_from_clientsecrets("credentials.json", scope)
             creds = tools.run_flow(flow, store)
         # Builds API service
         self.__service = build("calendar", "v3", http=creds.authorize(Http()))
