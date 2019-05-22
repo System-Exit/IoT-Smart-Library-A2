@@ -120,12 +120,12 @@ class MasterConsole:
             if(opt == "1"):
                 # Have user enter title to search by
                 title = input("Enter partial or full book title: ")
-                clause += "Title LIKE %%%s%%"
+                query += "Title LIKE %%%s%%"
                 values = [title]
             elif(opt == "2"):
                 # Have user enter author to search by
                 author = input("Enter partial or full author name: ")
-                clause += "Author LIKE %%%s%%"
+                query += "Author LIKE %%%s%%"
                 values = [author]
             elif(opt == "3"):
                 # Have user enter date range to search by
@@ -145,21 +145,21 @@ class MasterConsole:
                         valid_input = True
                     else:
                         print("Date is invalid.")
-                clause += "PublishedDate BETWEEN \
+                query += "PublishedDate BETWEEN \
                           CAST(%s AS DATE) AND \
                           CAST(%s AS DATE)"
                 values = [date_range_low, date_range_high]
             elif(opt == "4"):
                 # Have user enter book ID to search by
                 book_id = input("Enter ID of book: ")
-                clause += "BookID = %s"
+                query += "BookID = %s"
                 values = [book_id]
             else:
                 print("Invalid option.")
                 opt = None
 
         # Query the books database for all books that satisfy conditions
-        results = self.__gdb.search_books(clause, values)
+        results = self.__gdb.search_books(query, values)
         if(results is not None):
             # Build formatting rules
             id_width = max(max(len(x[0]) for x in results), len("ID"))
