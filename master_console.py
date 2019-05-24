@@ -161,7 +161,7 @@ class MasterConsole:
 
         # Query the books database for all books that satisfy conditions
         results = self.__gdb.search_books(clause, values)
-        if results is not None:
+        if results:
             # Build formatting rules
             id_width = max(max(len(str(x[0])) for x in results),
                            len("ID"))
