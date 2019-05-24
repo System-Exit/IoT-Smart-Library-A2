@@ -47,7 +47,7 @@ class GoogleDatabaseAPI:
             cursor.execute(query, parameters)
             result = cursor.fetchone()
         # Return the ID if the user exists, None otherwise
-        if(result is None):
+        if result is None:
             return None
         else:
             return result[0]
@@ -93,13 +93,13 @@ class GoogleDatabaseAPI:
 
         """
         # Define query
-        if(clause is None):
-            query = "SELECT * FROM BOOKS"
+        if clause is None:
+            query = "SELECT * FROM Book"
         else:
-            query = "SELECT * FROM Books WHERE " + clause
+            query = "SELECT * FROM Book WHERE " + clause
         # Execute query and return result
         with self.__connection.cursor() as cursor:
-            if(parameters is None):
+            if parameters is None:
                 cursor.execute(query)
             else:
                 cursor.execute(query, parameters)
@@ -119,7 +119,7 @@ class GoogleDatabaseAPI:
         """
         # Define insert statement
         query = "INSERT INTO BookBorrowed (UserID, BookID, Status, BorrowedDate) \
-                 VALUES (%s, %s, \"borrowed\", CURDATE())"
+                 VALUES (%s, %s, 'borrowed', CURDATE())"
         parameters = (userID, bookID)
         # Create borrowed entry in book borrow table
         with self.__connection.cursor() as cursor:
@@ -128,7 +128,7 @@ class GoogleDatabaseAPI:
         # Commit changes
         self.__connection.commit()
         # Return the ID of the borrowed book
-        return book_borrow_ID
+        return str(book_borrow_ID)
 
     def return_borrow_entry(self, book_borrowed_ID):
         """
@@ -139,8 +139,8 @@ class GoogleDatabaseAPI:
 
         """
         # Define update statement
-        query = "UPDATE BookBorrowed SET \"Status\" = \"Returned\" \
-                 WHERE \"BookBorrowedID\" = %s"
+        query = "UPDATE BookBorrowed SET Status = 'Returned' \
+                 WHERE BookBorrowedID = %s"
         parameters = (book_borrowed_ID,)
         # Update borrowed entry in book borrow table
         with self.__connection.cursor() as cursor:
@@ -167,36 +167,36 @@ class GoogleDatabaseAPI:
             cursor.execute(query, parameters)
             result = cursor.fetchone()
         # Return whether or not the book exists
-        if(result is None or result[0] == "borrowed"):
+        if result is None or result[0] == "borrowed":
             return False
         else:
             return True
 
     def check_book_borrowed(self, bookID):
         """
-        Queries the database to check if the book is not currently borrowed.
+        Queries the database to check if the book is currently borrowed.
 
         Args:
             bookID (str): The ID of the book to check
 
         Returns:
-            True and BookBorrowID if book is currently borrowed.
+            True and BookBorrowedID if book is currently borrowed.
             False and None if book is not currently borrowed.
 
         """
         # Define query
-        query = "SELECT Status FROM BookBorrowed WHERE BookID = %s \
-                 AND Status = \"borrowed\""
+        query = "SELECT BookBorrowedID FROM BookBorrowed WHERE BookID = %s \
+                 AND Status = 'borrowed'"
         parameters = (bookID,)
         # Execute query and get result
         with self.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
             result = cursor.fetchone()
         # Return whether or not the book is currently borrowed
-        if(result is None):
-            return True
+        if result is None:
+            return False, None
         else:
-            return False
+            return True, result[0]
 
 
 class GoogleCalendarAPI:
@@ -215,7 +215,7 @@ class GoogleCalendarAPI:
         store = file.Storage("token.json")
         creds = store.get()
         # If token file does not exist or is invalid, run through API setup
-        if(not creds or creds.invalid):
+        if not creds or creds.invalid:
             flow = client.flow_from_clientsecrets("credentials.json", scope)
             creds = tools.run_flow(flow, store)
         # Builds API service
@@ -232,28 +232,30 @@ class GoogleCalendarAPI:
 
         """
         # Define return date of book seven days from now
-        return_date = (datetime.now() + datetime.timedelta(days=7))
+        return_date = (datetime.datetime.now() + datetime.timedelta(days=7))
         # Create event with details of borrowing including book ID and user
+        summary = "Book %s borrowed" % str(bookID)
+        location = "RMIT PIoT Library"
+        description = "A book with an ID number of %s has \
+                       been borrowed by %s and is due to be returned \
+                       by this date." % (str(bookID), str(username))
+        eventID = "piotbb%s" % str(book_borrow_ID)
+        print("Borrow Event ID: %s" % eventID)
         event = {
-            "summary": "Book %s borrowed" % str(bookID),
-            "location": "RMIT PIoT Library",
-            "description": "A book with an ID number of %s has \
-                            been borrowed by %s and is due to be returned \
-                            by this date." % (str(bookID), str(username)),
+            "id": eventID,
+            "summary": summary,
+            "location": location,
+            "description": description,
             "start": {
-                "dateTime": return_date.strftime("%Y-%m-%d"),
-                "timeZone": "Australia/Melbourne",
+                "date": return_date.strftime("%Y-%m-%d"),
             },
             "end": {
-                "dateTime": return_date.strftime("%Y-%m-%d"),
-                "timeZone": "Australia/Melbourne",
+                "date": return_date.strftime("%Y-%m-%d"),
             }
         }
-        # Generate event ID with "bookBorrow" appended with GDB entry ID
-        eventID = "bookBorrow%s" % book_borrow_ID
         # Insert calendar event into calendar
         self.__service.events().insert(
-            calendarId="primary", eventId=eventID, body=event).execute()
+            calendarId="primary", body=event).execute()
 
     def remove_borrow_event(self, book_borrowed_ID):
         """
@@ -264,6 +266,8 @@ class GoogleCalendarAPI:
 
         """
         # Generate event ID of calendar event for borrowed book
-        eventID = "bookBorrow%s" % book_borrow_ID
+        eventID = "piotbb%s" % str(book_borrow_ID)
+        print("Borrow Event ID: %s" % eventID)
         # Delete calendar event for borrowed book
-        self.__service.events().delete(calendarId="primary", eventId=eventID)
+        self.__service.events().delete(calendarId="primary",
+                                       eventId=eventID).execute()
