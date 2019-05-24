@@ -221,11 +221,12 @@ class GoogleCalendarAPI:
         # Builds API service
         self.__service = build("calendar", "v3", http=creds.authorize(Http()))
 
-    def add_borrow_event(self, bookID, username):
+    def add_borrow_event(self, book_borrow_ID, bookID, username):
         """
         Adds a new borrow calendar event for a borrowed book.
 
         Args:
+            book_borrow_ID (str): ID that will be inlcuded in event ID
             bookID (str): ID of the book that is being borrowed
             username (str): Username of the user borrowing the book
 
@@ -233,12 +234,15 @@ class GoogleCalendarAPI:
         # Define return date of book seven days from now
         return_date = (datetime.datetime.now() + datetime.timedelta(days=7))
         # Create event with details of borrowing including book ID and user
-        summary = "Book borrowed with ID:%s." % str(bookID)
-        location = "RMIT PIoT Library."
+        summary = "Book %s borrowed" % str(bookID)
+        location = "RMIT PIoT Library"
         description = "A book with an ID number of %s has \
                        been borrowed by %s and is due to be returned \
                        by this date." % (str(bookID), str(username))
+        eventID = "piotbb%s" % str(book_borrow_ID)
+        print("Borrow Event ID: %s" % eventID)
         event = {
+            "id": eventID,
             "summary": summary,
             "location": location,
             "description": description,
@@ -253,20 +257,17 @@ class GoogleCalendarAPI:
         self.__service.events().insert(
             calendarId="primary", body=event).execute()
 
-    def remove_borrow_event(self, bookID):
+    def remove_borrow_event(self, book_borrowed_ID):
         """
         Removes an existing borrow calendar event for a book.
 
         Args:
-            bookID (str): ID of the book to remove borrow event for
+            book_borrowed_ID (str): ID of the book borrow entry in GDB
 
         """
-        # Get a list of all borrow events in calendar
-        events = self.__service.events().list(calendarId="primary")
-        # Check events for an event with the summary containing the bookID
-        for event in events["items"]:
-            if "ID:%s." % str(bookID) in event["summary"]:
-                # Delete calendar event for borrowed book if event exists
-                # TODO GET EVENT ID AND DELETE CORRESPONDING EVENT
-                self.__service.events().delete(calendarId="primary",
-                                               eventId=eventID).execute()
+        # Generate event ID of calendar event for borrowed book
+        eventID = "piotbb%s" % str(book_borrow_ID)
+        print("Borrow Event ID: %s" % eventID)
+        # Delete calendar event for borrowed book
+        self.__service.events().delete(calendarId="primary",
+                                       eventId=eventID).execute()
