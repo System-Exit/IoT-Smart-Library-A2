@@ -19,7 +19,7 @@ class MasterConsole:
                 listen on. Defaults to 65000.
 
         """
-        # Specify port to lisetn on
+        # Specify port to listen on
         self.__listen_port = listen_port
         # Load google database API
         self.__gdb = google_api.GoogleDatabaseAPI()
@@ -76,6 +76,8 @@ class MasterConsole:
             print("1. Search a book")
             print("2. Borrow a book")
             print("3. Return a book")
+            # Voice UI
+            print("4. Voice Search a book")
             print("0. Logout")
 
             # Get option from user
