@@ -117,7 +117,7 @@ class ReceptionConsole:
             print("Congratulations", first_name,
                   "you are now registered in our system!")
 
-    def register_user_face():
+    def register_user_face(self):
         """
         Prompt user for their username and allow them
         To register their face for facial recognition
@@ -134,7 +134,7 @@ class ReceptionConsole:
             return
 
         # Start face recognition process
-        facial_recognition.Facial_recognition().register_user(username)
+        facial_recognition.FacialRecognition().register_user(username)
 
     def credential_login(self):
         """
@@ -161,11 +161,11 @@ class ReceptionConsole:
 
         """
         # Begin facial recognition and get username of user
-        username = facial_recognition.Facial_recognition().recognize_user()
+        username = facial_recognition.FacialRecognition().recognize_user()
         # Check if user was not recognized
         if username is None:
-            print("Your face could not be recognized, \
-                   have you registered for face recognition?")
+            print("Your face could not be recognized.")
+            print("Have you registered for face recognition?")
             return
         # Get user information
         db = local_database.LocalDatabase(LOCAL_DB_NAME)
