@@ -43,23 +43,22 @@ class MasterConsole:
             conn, addr = sock.accept()
             print("Reception PI has connected!")
             with conn:
-                # Continuously loop getting user info from reception, handling
-                # the user then sending a logoff message once user logs off
-                while True:
-                    print("Waiting for user to connect...")
-                    # Receive username and user's name
-                    data = socket_utils.recvJson(conn)
-                    username = data["username"]
-                    first_name = data["firstname"]
-                    last_name = data["lastname"]
-                    # Add user details to database if this their first login
-                    userID = self.__gdb.get_userID_by_username(username)
-                    if not userID:
-                        self.__gdb.add_user(username, first_name, last_name)
-                    # Display console
-                    self.display_console(userID, username, first_name)
-                    # Send logoff message
-                    socket_utils.sendJson(conn, {"logout": "true", })
+                print("Waiting for user to connect...")
+                # Receive username and user's name
+                data = SocketUtils.recvJson(conn)
+                username = data["username"]
+                first_name = data["firstname"]
+                last_name = data["lastname"]
+                # Add user details to database if this their first login
+                userID = self.__gdb.get_userID_by_username(username)
+                if not userID:
+                    self.__gdb.add_user(username, first_name, last_name)
+                # Display console
+                self.display_console(userID, username, first_name)
+                # Send logoff message
+                SocketUtils.sendJson(conn, {"logout": "true", })
+            # Close socket
+            sock.close()
 
     def display_console(self, userID, username, name):
         """
@@ -288,4 +287,5 @@ class MasterConsole:
 # Starts the Master Pi Console
 if __name__ == "__main__":
     master_console = MasterConsole()
-    master_console.connect_to_reception()
+    while True:
+        master_console.connect_to_reception()

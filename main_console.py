@@ -7,7 +7,7 @@ import sys
 import socket
 import json
 sys.path.append("..")
-import socket_utils
+from socket_utils import SocketUtils
 
 LOCAL_DB_NAME = "library_user_database"
 
@@ -121,11 +121,11 @@ class ReceptionConsole:
             print("Successfully Connected")
 
             print("Logging in as {}".format(user["username"]))
-            socket_utils.sendJson(s, user)
+            SocketUtils.sendJson(s, user)
 
             print("Waiting for Master Pi...")
             while(True):
-                object = socket_utils.recvJson(s)
+                object = SocketUtils.recvJson(s)
                 if("logout" in object):
                     print("Master Pi logged out.")
                     print()
