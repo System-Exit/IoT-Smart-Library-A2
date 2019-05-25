@@ -170,6 +170,7 @@ class MasterConsole:
                 opt = None
 
         # Query the books database for all books that satisfy conditions
+        print("Search the GDB")
         results = self.__gdb.search_books(clause, values)
         if results:
             # Build formatting rules
