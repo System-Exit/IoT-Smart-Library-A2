@@ -147,5 +147,4 @@ class LocalDatabase:
 
         # Return whether or not a user exists
         count_result = row[0]
-        print("User found:" + str(count_result))
         return count_result is not 0
