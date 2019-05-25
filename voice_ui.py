@@ -7,11 +7,10 @@ MIC_NAME = "Microsoft® LifeCam HD-3000: USB Audio (hw:1,0)"
 
 class VoiceRecognition:
     def __init__(self):
-        pass
+        self.__gdb = google_api.GoogleDatabaseAPI()
 
+    # Code by Matthew Bolger
     def voice_search(self):
-        print("Starting microphone...")
-        # Code by Matthew Bolger
         for i, microphone_name in enumerate(sr.Microphone.list_microphone_names()):
             if(microphone_name == MIC_NAME):
                 device_id = i
@@ -27,24 +26,27 @@ class VoiceRecognition:
             # energy threshold based on the surrounding noise level
             r.adjust_for_ambient_noise(source)
 
-            print("Say the name to search for.")
+            print("Say something for the Library!")
             try:
                 audio = r.listen(source, timeout = 0.5)
             except sr.WaitTimeoutError:
-                print("Timeout")
-                return None
+                print("Listening timed out whilst waiting for phrase to start")
+                return ""
 
         # recognize speech using Google Speech Recognition
-        search_string = None
+        search_string = ""
         try:
             # for testing purposes, we're just using the default API key
             # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
             # instead of `r.recognize_google(audio)`
+            print("Google Speech Recognition thinks you said '{}'".format(r.recognize_google(audio)))
             search_string = r.recognize_google(audio)
-        except(sr.UnknownValueError, sr.RequestError):
-            pass
-        finally:
             return search_string
+        except sr.UnknownValueError:
+            print("Google Speech Recognition could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
 
     def search_books(self):
         """
@@ -68,11 +70,11 @@ class VoiceRecognition:
             if opt == "1":
                 # Have user enter title to search by
                 title = self.voice_search()
-                
                 clause += "Title LIKE %s"
                 values = ["%"+title+"%"]
             elif opt == "2":
                 # Have user enter author to search by
+                self.voice_search()
                 author = self.voice_search()
                 clause += "Author LIKE %s"
                 values = ["%"+author+"%"]
@@ -108,6 +110,7 @@ class VoiceRecognition:
                 opt = None
 
         # Query the books database for all books that satisfy conditions
+        print("Search the GDB")
         results = self.__gdb.search_books(clause, values)
         if results is not None:
             # Build formatting rules
@@ -132,3 +135,25 @@ class VoiceRecognition:
                                        str(book[3]).center(pub_date_width)))
         else:
             print("No books were found with this filter.")
+
+    def valid_date(self, date):
+        """
+        Checks if given date is valid and returns true if so, false if not.
+
+        Args:
+            date (str): String of date in the format of YYYY-MM-DD.
+
+        Returns:
+            Whether or not the date is valid.
+
+        """
+        # Split date into year, month and day
+        year, month, day = date.split("-")
+        try:
+            # Attempt to parse the date
+            datetime.datetime(int(year), int(month), int(day))
+        except ValueError:
+            # Parse failed, so return false
+            return False
+        # Parse was successful, so return true
+        return True
