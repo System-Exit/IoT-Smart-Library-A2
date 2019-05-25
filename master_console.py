@@ -51,7 +51,8 @@ class MasterConsole:
             userID = self.__gdb.get_userID_by_username(username)
             if not userID:
                 self.__gdb.add_user(username, first_name, last_name)
-            # Display console
+            # Welcome user and start console menu
+            print("Welcome %s!" % first_name)
             self.display_console(userID, username, first_name)
             # Send logoff message
             SocketUtils.sendJson(conn, {"logout": "true", })
@@ -66,12 +67,12 @@ class MasterConsole:
         """
         while True:
             # Display menu
-            print("Hello %s" % name)
-            print("Select an option:")
-            print("1. Search a book")
-            print("2. Borrow a book")
-            print("3. Return a book")
-            print("0. Logout")
+            print()
+            print("*** Library Menu ***".center(26, ' '))
+            print("{0: <25}".format("Serach for a book"), "1")
+            print("{0: <25}".format("Borrow a book"), "2")
+            print("{0: <25}".format("Return a book"), "3")
+            print("{0: <25}".format("Logout"), "0")
 
             # Get option from user
             opt = None
@@ -215,7 +216,7 @@ class MasterConsole:
             response = input("Would you like to borrow another book?(Y/N): ")
             if response.upper() == "Y":
                 # Recursively calls borrow books again
-                self.borrow_books()
+                self.borrow_books(userID, username)
                 return
             elif response.upper() == "N":
                 return
@@ -242,6 +243,8 @@ class MasterConsole:
             if borrowed:
                 # Update the borrowed book database entry status
                 self.__gdb.return_borrow_entry(book_borrowed_ID)
+                # Update calendar by removing borrow calendar event
+                self.__gc.remove_borrow_event(book_borrowed_ID)
             else:
                 # Inform the user this book has not been borrowed
                 print("This book is not currently borrowed.")

@@ -240,7 +240,6 @@ class GoogleCalendarAPI:
                        been borrowed by %s and is due to be returned \
                        by this date." % (str(bookID), str(username))
         eventID = "piotbb%s" % str(book_borrow_ID)
-        print("Borrow Event ID: %s" % eventID)
         event = {
             "id": eventID,
             "summary": summary,
@@ -266,8 +265,7 @@ class GoogleCalendarAPI:
 
         """
         # Generate event ID of calendar event for borrowed book
-        eventID = "piotbb%s" % str(book_borrow_ID)
-        print("Borrow Event ID: %s" % eventID)
+        eventID = "piotbb%s" % str(book_borrowed_ID)
         # Delete calendar event for borrowed book
         self.__service.events().delete(calendarId="primary",
                                        eventId=eventID).execute()
