@@ -112,7 +112,7 @@ class Facial_recognition:
 
         """
         # Start up camera
-        camera = self.get_camera()
+        camera = self.__get_camera()
         # Load prebuilt classifier for face detection
         face_detector = cv2.CascadeClassifier(
             "haarcascade_frontalface_default.xml")
@@ -176,7 +176,7 @@ class Facial_recognition:
         with open(self.__encodings_path, "wb") as encode_file:
             encode_file.write(pickle.dumps(data))
 
-    def get_camera(self):
+    def __get_camera(self):
         """
         Starts, sets up and returns a variable to the camera for use
 

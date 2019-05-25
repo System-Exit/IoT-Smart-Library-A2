@@ -6,6 +6,7 @@ import re
 import sys
 import socket
 import json
+import facial_recognition
 from socket_utils import SocketUtils
 sys.path.append("..")
 
@@ -38,9 +39,12 @@ class ReceptionConsole:
         while exit_program is False:
             # Clears the terminal to clean screen
 
-            menu_str = "*** Library Menu ***"
-            print(menu_str.center(26, ' '))
-            self.library_menu()
+            print("*** Library Menu ***".center(32, ' '))
+            print('{0: <31}'.format('Register New User'), '1')
+            print('{0: <31}'.format('Register Face Recognition'), '2')
+            print('{0: <31}'.format('Login with Credentials'), '3')
+            print('{0: <31}'.format('Login with Face Recognition'), '4')
+            print('{0: <31}'.format('Shutdown'), '0')
 
             selection = input("Select an option: ")
 
@@ -50,19 +54,22 @@ class ReceptionConsole:
 
             elif selection is '2':
                 os.system('cls' if os.name is 'nt' else 'clear')
-                self.existing_user_login()
+                self.register_user_face()
 
             elif selection is '3':
+                os.system('cls' if os.name is 'nt' else 'clear')
+                self.credential_login()
+
+            elif selection is '4':
+                os.system('cls' if os.name is 'nt' else 'clear')
+                self.face_login()
+
+            elif selection is '0':
                 os.system('cls' if os.name is 'nt' else 'clear')
                 exit_program = True
 
             else:
                 print("Invalid selection: Please try again!")
-
-    def library_menu(self):
-        print('{0: <25}'.format('Register New User'), '1')
-        print('{0: <25}'.format('Login'), '2')
-        print('{0: <25}'.format('Shutdown'), '3')
 
     def password_encryption(self, password):
         password = password.encode()
@@ -71,6 +78,12 @@ class ReceptionConsole:
         return(hash_password)
 
     def new_user_details(self):
+        """
+        Prompt user for information including their first name, last name
+        and email, then allow them to set a username and password for
+        creating a new account.
+
+        """
         first_name = input("Please Enter Your First Name: ").capitalize()
         last_name = input("Please Enter Your Last Name: ").capitalize()
 
@@ -104,22 +117,70 @@ class ReceptionConsole:
             print("Congratulations", first_name,
                   "you are now registered in our system!")
 
-    # Prompt user for their login details, scan database for
-    # username, compare hashed password
-    def existing_user_login(self):
-            username = input("Please Enter Your Username: ")
-            password = input("Please Enter Your Password: ")
-            password = self.password_encryption(password)
+    def register_user_face():
+        """
+        Prompt user for their username and allow them
+        To register their face for facial recognition
+        based logins.
 
-            db = local_database.LocalDatabase(LOCAL_DB_NAME)
+        """
+        # Ask user for their username
+        username = input("Please Enter Your Username: ")
 
-            user = db.verify_login(username, password)
-            if user is not False:
-                self.send_request(user)
-            else:
-                print("Username/Password incorrect: Please Try Again")
+        # Check in database that user exists
+        db = local_database.LocalDatabase(LOCAL_DB_NAME)
+        if not db.check_user_exists(username):
+            print("User not found, have you registered yet?")
+            return
+
+        # Start face recognition process
+        facial_recognition.Facial_recognition().register_user(username)
+
+    def credential_login(self):
+        """
+        Prompt user for their login details, scan database for
+        username, compare hashed password.
+
+        """
+        username = input("Please Enter Your Username: ")
+        password = input("Please Enter Your Password: ")
+        password = self.password_encryption(password)
+
+        db = local_database.LocalDatabase(LOCAL_DB_NAME)
+
+        user = db.verify_login(username, password)
+        if user is not False:
+            self.send_request(user)
+        else:
+            print("Username/Password incorrect: Please Try Again")
+
+    def face_login(self):
+        """
+        Allow user to login via facial recognition if they have
+        registered their face for facial recognition.
+
+        """
+        # Begin facial recognition and get username of user
+        username = facial_recognition.Facial_recognition().recognize_user()
+        # Check if user was not recognized
+        if username is None:
+            print("Your face could not be recognized, \
+                   have you registered for face recognition?")
+            return
+        # Get user information
+        db = local_database.LocalDatabase(LOCAL_DB_NAME)
+        user = db.get_user_info(username)
+        # Send request to master pi
+        self.send_request(user)
 
     def send_request(self, user):
+        """
+        Sends login request and user details to master pi
+
+        Args:
+            user: Dictionary of user details
+
+        """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print("Connecting to {}...".format(ADDRESS))
             s.connect(ADDRESS)
