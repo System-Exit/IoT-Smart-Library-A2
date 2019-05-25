@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+
 import socket
 import google_api
 import datetime
 import socket_utils
+from voice_ui import VoiceRecognition
 
 
 class MasterConsole:
@@ -70,6 +73,8 @@ class MasterConsole:
 
         """
         while True:
+            recoqnizer = VoiceRecognition()
+
             # Display menu
             print("Hello %s" % name)
             print("Select an option:")
@@ -94,6 +99,9 @@ class MasterConsole:
                 elif opt == "3":
                     # Let user return book
                     self.return_books()
+                # Voice UI
+                elif opt == "4":
+                    recoqnizer.search_books()
                 elif opt == "0":
                     # Logs off master pi console
                     return
