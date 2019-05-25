@@ -29,6 +29,8 @@ class ReceptionConsole:
     def __init__(self, send_port=65000):
         # Specifies the port to send to
         self.__send_port = send_port
+        # Initializes facial recognition
+        self.__fc = facial_recognition.FacialRecognition()
 
     def display_console(self):
         """
@@ -134,7 +136,7 @@ class ReceptionConsole:
             return
 
         # Start face recognition process
-        facial_recognition.FacialRecognition().register_user(username)
+        self.__fc.register_user(username)
 
     def credential_login(self):
         """
@@ -161,7 +163,7 @@ class ReceptionConsole:
 
         """
         # Begin facial recognition and get username of user
-        username = facial_recognition.FacialRecognition().recognize_user()
+        username = self.__fc.recognize_user()
         # Check if user was not recognized
         if username is None:
             print("Your face could not be recognized.")
