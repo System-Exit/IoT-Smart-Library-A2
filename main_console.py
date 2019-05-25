@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import library_user
 import hashlib
 import local_database
