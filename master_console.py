@@ -3,8 +3,12 @@
 import socket
 import google_api
 import datetime
+<<<<<<< HEAD
 import socket_utils
 from voice_ui import VoiceRecognition
+=======
+from socket_utils import SocketUtils
+>>>>>>> development
 
 
 class MasterConsole:
@@ -22,8 +26,14 @@ class MasterConsole:
                 listen on. Defaults to 65000.
 
         """
+<<<<<<< HEAD
         # Specify port to listen on
         self.__listen_port = listen_port
+=======
+        # Initialize and bind socket to listen on
+        self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.__socket.bind(("", listen_port))
+>>>>>>> development
         # Load google database API
         self.__gdb = google_api.GoogleDatabaseAPI()
         # Load google calendar API
@@ -36,33 +46,28 @@ class MasterConsole:
         the user
 
         """
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            # Bind socket to listen on specified port
-            sock.bind(("", self.__listen_port))
-            sock.listen()
-
-            # Accept the connection from reception pi
-            print("Waiting for Reception Pi to connect...")
-            conn, addr = sock.accept()
-            print("Reception PI has connected!")
-            with conn:
-                # Continuously loop getting user info from reception, handling
-                # the user then sending a logoff message once user logs off
-                while True:
-                    print("Waiting for user to connect...")
-                    # Receive username and user's name
-                    data = socket_utils.recvJson(conn)
-                    username = data["username"]
-                    first_name = data["firstname"]
-                    last_name = data["lastname"]
-                    # Add user details to database if this their first login
-                    userID = self.__gdb.get_userID_by_username(username)
-                    if not userID:
-                        self.__gdb.add_user(username, first_name, last_name)
-                    # Display console
-                    self.display_console(userID, username, first_name)
-                    # Send logoff message
-                    socket_utils.sendJson(conn, {"logout": "true", })
+        # Listen for reception pi
+        self.__socket.listen()
+        # Accept the connection from reception pi
+        print("Waiting for Reception Pi to connect...")
+        conn, addr = self.__socket.accept()
+        print("Reception PI has connected!")
+        with conn:
+            print("Waiting for user to connect...")
+            # Receive username and user's name
+            data = SocketUtils.recvJson(conn)
+            username = data["username"]
+            first_name = data["firstname"]
+            last_name = data["lastname"]
+            # Add user details to database if this their first login
+            userID = self.__gdb.get_userID_by_username(username)
+            if not userID:
+                self.__gdb.add_user(username, first_name, last_name)
+            # Welcome user and start console menu
+            print("Welcome %s!" % first_name)
+            self.display_console(userID, username, first_name)
+            # Send logoff message
+            SocketUtils.sendJson(conn, {"logout": "true", })
 
     def display_console(self, userID, username, name):
         """
@@ -76,6 +81,7 @@ class MasterConsole:
             recoqnizer = VoiceRecognition()
 
             # Display menu
+<<<<<<< HEAD
             print("Hello %s" % name)
             print("Select an option:")
             print("1. Search a book")
@@ -84,6 +90,14 @@ class MasterConsole:
             # Voice UI
             print("4. Voice Search a book")
             print("0. Logout")
+=======
+            print()
+            print("*** Library Menu ***".center(26, ' '))
+            print("{0: <25}".format("Serach for a book"), "1")
+            print("{0: <25}".format("Borrow a book"), "2")
+            print("{0: <25}".format("Return a book"), "3")
+            print("{0: <25}".format("Logout"), "0")
+>>>>>>> development
 
             # Get option from user
             opt = None
@@ -231,7 +245,7 @@ class MasterConsole:
             response = input("Would you like to borrow another book?(Y/N): ")
             if response.upper() == "Y":
                 # Recursively calls borrow books again
-                self.borrow_books()
+                self.borrow_books(userID, username)
                 return
             elif response.upper() == "N":
                 return
@@ -258,6 +272,8 @@ class MasterConsole:
             if borrowed:
                 # Update the borrowed book database entry status
                 self.__gdb.return_borrow_entry(book_borrowed_ID)
+                # Update calendar by removing borrow calendar event
+                self.__gc.remove_borrow_event(book_borrowed_ID)
             else:
                 # Inform the user this book has not been borrowed
                 print("This book is not currently borrowed.")
@@ -299,4 +315,5 @@ class MasterConsole:
 # Starts the Master Pi Console
 if __name__ == "__main__":
     master_console = MasterConsole()
-    master_console.connect_to_reception()
+    while True:
+        master_console.connect_to_reception()
