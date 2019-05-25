@@ -6,8 +6,8 @@ import re
 import sys
 import socket
 import json
-sys.path.append("..")
 from socket_utils import SocketUtils
+sys.path.append("..")
 
 LOCAL_DB_NAME = "library_user_database"
 
@@ -18,13 +18,15 @@ HOSTNAME = data["MasterPi_IP"]
 PORT = 65000
 ADDRESS = (HOSTNAME, PORT)
 
+
 class ReceptionConsole:
     """
-    Class for handling user information and user login for connecting to the 'Master Pi'
+    Class for handling user information and user login
+    for connecting to the 'Master Pi'
     """
 
     def __init__(self, send_port=65000):
-        #Specifies the port to send to
+        # Specifies the port to send to
         self.__send_port = send_port
 
     def display_console(self):
@@ -34,7 +36,7 @@ class ReceptionConsole:
         exit_program = False
 
         while exit_program is False:
-            #Clears the terminal to clean screen
+            # Clears the terminal to clean screen
 
             menu_str = "*** Library Menu ***"
             print(menu_str.center(26, ' '))
@@ -56,7 +58,6 @@ class ReceptionConsole:
 
             else:
                 print("Invalid selection: Please try again!")
-                
 
     def library_menu(self):
         print('{0: <25}'.format('Register New User'), '1')
@@ -73,7 +74,7 @@ class ReceptionConsole:
         first_name = input("Please Enter Your First Name: ").capitalize()
         last_name = input("Please Enter Your Last Name: ").capitalize()
 
-        #Email must be passed through regex
+        # Email must be passed through regex
         while True:
             email = input("Please Enter Your Email: ")
             if(re.match(r"[^@]+@[^@]+\.[^@]+", email)):
@@ -81,26 +82,30 @@ class ReceptionConsole:
             else:
                 print("Email not valid: Please try again...")
 
-        #Must scan database to ensure username is unique
+        # Must scan database to ensure username is unique
         username = input("Please Enter Desired Username: ")
 
-        #Password must be hashed for encryption
+        # Password must be hashed for encryption
         password = input("Please Enter Your Password: ")
         password = self.password_encryption(password)
 
-        #Information must be stored in the database
+        # Information must be stored in the database
         db = local_database.LocalDatabase(LOCAL_DB_NAME)
-        
-        if db.insert_new_user(first_name, last_name, email, username, password) is 1:
+
+        if db.insert_new_user(first_name, last_name, email,
+                              username, password) is 1:
             print("Username Already Exists, Please Try Another")
 
-        elif db.insert_new_user(first_name, last_name, email, username, password) is 2:
+        elif db.insert_new_user(first_name, last_name, email,
+                                username, password) is 2:
             print("Email Already Exists")
 
         else:
-            print("Congratulations", first_name, "you are now registered in our system!")
+            print("Congratulations", first_name,
+                  "you are now registered in our system!")
 
-    #Prompt user for their login details, scan database for username, compare hashed password
+    # Prompt user for their login details, scan database for
+    # username, compare hashed password
     def existing_user_login(self):
             username = input("Please Enter Your Username: ")
             password = input("Please Enter Your Password: ")
@@ -131,7 +136,7 @@ class ReceptionConsole:
                     print()
                     break
 
-#Starts the Reception Pi
+# Starts the Reception Pi
 if __name__ == "__main__":
     reception_console = ReceptionConsole()
     reception_console.display_console()
