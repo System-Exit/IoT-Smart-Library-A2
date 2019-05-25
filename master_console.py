@@ -1,7 +1,7 @@
 import socket
 import google_api
 import datetime
-import socket_utils
+from socket_utils import SocketUtils
 
 
 class MasterConsole:
@@ -19,8 +19,9 @@ class MasterConsole:
                 listen on. Defaults to 65000.
 
         """
-        # Specify port to lisetn on
-        self.__listen_port = listen_port
+        # Initialize and bind socket to listen on
+        self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.__socket.bind(("", listen_port))
         # Load google database API
         self.__gdb = google_api.GoogleDatabaseAPI()
         # Load google calendar API
@@ -33,32 +34,27 @@ class MasterConsole:
         the user
 
         """
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            # Bind socket to listen on specified port
-            sock.bind(("", self.__listen_port))
-            sock.listen()
-
-            # Accept the connection from reception pi
-            print("Waiting for Reception Pi to connect...")
-            conn, addr = sock.accept()
-            print("Reception PI has connected!")
-            with conn:
-                print("Waiting for user to connect...")
-                # Receive username and user's name
-                data = SocketUtils.recvJson(conn)
-                username = data["username"]
-                first_name = data["firstname"]
-                last_name = data["lastname"]
-                # Add user details to database if this their first login
-                userID = self.__gdb.get_userID_by_username(username)
-                if not userID:
-                    self.__gdb.add_user(username, first_name, last_name)
-                # Display console
-                self.display_console(userID, username, first_name)
-                # Send logoff message
-                SocketUtils.sendJson(conn, {"logout": "true", })
-            # Close socket
-            sock.close()
+        # Listen for reception pi
+        self.__socket.listen()
+        # Accept the connection from reception pi
+        print("Waiting for Reception Pi to connect...")
+        conn, addr = self.__socket.accept()
+        print("Reception PI has connected!")
+        with conn:
+            print("Waiting for user to connect...")
+            # Receive username and user's name
+            data = SocketUtils.recvJson(conn)
+            username = data["username"]
+            first_name = data["firstname"]
+            last_name = data["lastname"]
+            # Add user details to database if this their first login
+            userID = self.__gdb.get_userID_by_username(username)
+            if not userID:
+                self.__gdb.add_user(username, first_name, last_name)
+            # Display console
+            self.display_console(userID, username, first_name)
+            # Send logoff message
+            SocketUtils.sendJson(conn, {"logout": "true", })
 
     def display_console(self, userID, username, name):
         """
