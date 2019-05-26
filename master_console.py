@@ -2,6 +2,7 @@ import socket
 import google_api
 import datetime
 import os
+import sys
 from socket_utils import SocketUtils
 
 
@@ -37,12 +38,19 @@ class MasterConsole:
         """
         # Listen for reception pi
         self.__socket.listen()
-        # Accept the connection from reception pi
         print("Waiting for Reception Pi to connect...")
-        conn, addr = self.__socket.accept()
+        # Accept the connection from reception pi
+        try:
+            conn, addr = self.__socket.accept()
+        # If the user presses ctrl-c while waiting for a connection,
+        # close the socket and end the program gracefully
+        except KeyboardInterrupt:
+            print("Stopping Master Pi.")
+            self.__socket.close()
+            sys.exit()
+        # Handle connection
         print("Reception PI has connected!")
         with conn:
-            print("Waiting for user to connect...")
             # Receive username and user's name
             data = SocketUtils.recvJson(conn)
             username = data["username"]
