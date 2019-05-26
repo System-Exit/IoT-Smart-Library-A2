@@ -167,7 +167,7 @@ class GoogleDatabaseAPI:
             cursor.execute(query, parameters)
             result = cursor.fetchone()
         # Return whether or not the book exists
-        if result is None or result[0] == "borrowed":
+        if result is None:
             return False
         else:
             return True
@@ -212,11 +212,11 @@ class GoogleCalendarAPI:
         """
         # Load token for Google calendar API
         scope = "https://www.googleapis.com/auth/calendar"
-        store = file.Storage("token.json")
+        store = file.Storage("gc_token.json")
         creds = store.get()
         # If token file does not exist or is invalid, run through API setup
         if not creds or creds.invalid:
-            flow = client.flow_from_clientsecrets("credentials.json", scope)
+            flow = client.flow_from_clientsecrets("gc_credentials.json", scope)
             creds = tools.run_flow(flow, store)
         # Builds API service
         self.__service = build("calendar", "v3", http=creds.authorize(Http()))
@@ -236,9 +236,9 @@ class GoogleCalendarAPI:
         # Create event with details of borrowing including book ID and user
         summary = "Book %s borrowed" % str(bookID)
         location = "RMIT PIoT Library"
-        description = "A book with an ID number of %s has \
-                       been borrowed by %s and is due to be returned \
-                       by this date." % (str(bookID), str(username))
+        description = ("A book with an ID number of %s has "
+                       "been borrowed by %s and is due to be returned "
+                       "by this date.") % (str(bookID), str(username))
         eventID = "piotbb%s" % str(book_borrow_ID)
         event = {
             "id": eventID,

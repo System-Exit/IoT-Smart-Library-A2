@@ -10,7 +10,7 @@ import facial_recognition
 from socket_utils import SocketUtils
 sys.path.append("..")
 
-LOCAL_DB_NAME = "library_user_database"
+LOCAL_DB_NAME = "library_user_database.db"
 
 with open("config.json", "r") as file:
     data = json.load(file)
