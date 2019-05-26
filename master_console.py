@@ -65,6 +65,10 @@ class MasterConsole:
             # Send logoff message
             SocketUtils.sendJson(conn, {"logout": "true", })
 
+    def keyboard_input(self):
+        string = input("Enter search string: ")
+        return string
+
     def display_console(self, userID, username, first_name):
         """
         Displays console menu and gets an option from user.
@@ -81,6 +85,8 @@ class MasterConsole:
             print("{0: <25}".format("Serach for a book"), "1")
             print("{0: <25}".format("Borrow a book"), "2")
             print("{0: <25}".format("Return a book"), "3")
+            print("{0: <25}".format("Search by voice"), "4")
+            print("{0: <25}".format("Search by barcode"), "5")
             print("{0: <25}".format("Logout"), "0")
 
             # Get option from user
@@ -90,13 +96,21 @@ class MasterConsole:
                 # Handle option from user
                 if opt == "1":
                     # Let user search for a book
-                    self.search_books()
+                    self.search_books(opt, True, False, False)
                 elif opt == "2":
                     # Let user borrow book
                     self.borrow_books(userID, username)
                 elif opt == "3":
                     # Let user return book
                     self.return_books()
+                # Voice UI
+                elif opt == "4":
+                    recoqnizer.search_books()
+                elif opt == "5":
+                    # just call search books from qr function here
+                    # get it working
+                    string = qr.read_barcode()
+                    qr.search_books(string)
                 elif opt == "0":
                     # Logs off master pi console
                     return
@@ -104,7 +118,18 @@ class MasterConsole:
                     print("Invalid option.")
                     opt = None
 
-    def search_books(self):
+    def search_options(self, opt):
+        # Display options for what field to search for books by
+        if not opt == "5":
+            print("What field would you like to search by?")
+            print("1. Title")
+            print("2. Author")
+            if not opt == "4":
+                print("3. Publication date")
+                print("4. Book ID")
+            print("0. Back")
+
+    def search_books(self, opt, text=False, voice=False, qr=False):
         """
         Asks user to specify a property and property value, which
         is then used in a search of all books in the database and
@@ -113,19 +138,15 @@ class MasterConsole:
         """
         # Initialize clause for search
         clause = ""
-        # Display options for what field to search for books by
-        print("What field would you like to search by?")
-        print("1. Title")
-        print("2. Author")
-        print("3. Publication date")
-        print("4. Book ID")
+        self.search_options(opt)
         # Get option from user
         opt = None
         while opt is None:
             opt = input("Select an option: ")
             if opt == "1":
                 # Have user enter title to search by
-                title = input("Enter partial or full book title: ")
+                if text == True:
+                    title = input("Enter partial or full book name: ")
                 clause += "Title LIKE %s"
                 values = ["%"+title+"%"]
             elif opt == "2":
@@ -157,9 +178,15 @@ class MasterConsole:
                 values = [date_range_low, date_range_high]
             elif opt == "4":
                 # Have user enter book ID to search by
-                book_id = input("Enter ID of book: ")
+                if text == True:
+                    book_id = input("Enter ID of book: ")
+                elif voice == True:
+                    book_id = qr.read_barcode()
                 clause += "BookID = %s"
                 values = [book_id]
+            # Go to previous menu if user accidentally made wrong selection
+            elif opt == "0":
+                return
             else:
                 print("Invalid option.")
                 opt = None

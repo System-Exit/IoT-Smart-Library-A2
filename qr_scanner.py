@@ -52,8 +52,6 @@ class QRScanner:
                 print("[FOUND] Type: {}, Data: {}".format(barcodeType, barcodeData))
                 found.add(barcodeData)
             
-            # wait a little before scanning again
-            time.sleep(1)
 
         # Stop the video stream
         print("[INFO] closing video stream...")
@@ -61,16 +59,62 @@ class QRScanner:
         print(barcodeData)
         return barcodeData
 
+    def search_books(self, string):
+        """
+        Asks user to specify a property and property value, which
+        is then used in a search of all books in the database and
+        the result is formatted and displayed to the user
+
+        """
+        # Initialize clause for search
+        clause = ""
+
+        # Get option from user
+
+        # Have user enter book ID to search by
+        book_id = string
+        clause += "BookID = %s"
+        values = [book_id]
+
+        # Query the books database for all books that satisfy conditions
+        print("Search the GDB")
+        results = self.__gdb.search_books(clause, values)
+        if results:
+            # Build formatting rules
+            id_width = max(max(len(str(x[0])) for x in results),
+                           len("ID"))
+            title_width = max(max(len(str(x[1])) for x in results),
+                              len("Title"))
+            author_width = max(max(len(str(x[2])) for x in results),
+                               len("Author"))
+            pub_date_width = len("Publish Date")
+            isbn_width = max(13, len("ISBN"))
+            total_width = sum((id_width, title_width, author_width,
+                               pub_date_width, isbn_width, 4))
+            # Display all options on screen
+            print("%s|%s|%s|%s|%s" % ("ID".center(id_width),
+                                      "Title".center(title_width),
+                                      "Author".center(author_width),
+                                      "Publish Date".center(pub_date_width),
+                                      "ISBN".center(isbn_width)))
+            print('-'*total_width)
+            for book in results:
+                print("%s|%s|%s|%s|%s" % (str(book[0]).rjust(id_width),
+                                          str(book[1]).ljust(title_width),
+                                          str(book[2]).ljust(author_width),
+                                          str(book[3]).center(pub_date_width),
+                                          str(book[4]).center(isbn_width)))
+        
+        else:
+            print("No books were found with this filter.")
+        # Wait for user to press enter before returning to menu
+        input("Press enter to return to menu.")
+
 
     def __init_video_stream(self):
         print("[INFO] starting video stream...")
         vs = VideoStream( src = -1 ).start()
         time.sleep(2.0)
         return vs
-        
-
-# for testing, delete
-if __name__ == "__main__":
-    qr = QRScanner()
-    qr.read_barcode()
+    
     
