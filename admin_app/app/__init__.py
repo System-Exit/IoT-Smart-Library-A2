@@ -8,9 +8,6 @@ site = Blueprint("site", __name__)
 app = Flask(__name__)
 app.config.from_object(Config)
 
-
-
-
 from app import routes
 # Client webpage. # Landing Page of website
 @site.route("/")

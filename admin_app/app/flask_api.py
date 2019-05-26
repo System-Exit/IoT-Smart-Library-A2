@@ -4,7 +4,7 @@ from flask_marshmallow import Marshmallow
 import os, requests, json
 from flask import current_app as app
 
-api = Blueprint("api", __name__)
+api = Blueprint("api", __name__) #TODO Check what this does
 
 app = Flask(__name__)
 
@@ -20,7 +20,6 @@ class Book(db.Model):
     Title = db.Column(db.Text, nullable = False)
     Author = db.Column(db.text, nullable = False)
     PublisherDate = db.cloumn(db.date, nullable = False)    
-    # Username = db.Column(db.String(256), unique = True)
 
     def __init__(self, BookID, Title, Author, PublisherDate):
         self.BookID = BookID
@@ -28,7 +27,7 @@ class Book(db.Model):
         self.Author = Author
         self.PublisherDate = PublisherDate
 
-class PersonSchema(ma.Schema):
+class BookSchema(ma.Schema):
     # Reference: https://github.com/marshmallow-code/marshmallow/issues/377#issuecomment-261628415
     def __init__(self, strict = True, **kwargs):
         super().__init__(strict = strict, **kwargs)
@@ -37,14 +36,14 @@ class PersonSchema(ma.Schema):
         # Fields to expose.
         fields = ("BookID", "Title", "Author", "PubisherDate")
 
-bookSchema = PersonSchema()
-bookSchema = PersonSchema(many = True)
+bookSchema = BookSchema()
+bookSchema = BookSchema(many = True)
 
 # Endpoint to show all books.
 @api.route("/book", methods = ["GET"])
 def getBooks():
     book = Book.query.all()
-    result = bookSchema.dump(people)
+    result = bookSchema.dump(book)
 
     return jsonify(result.data)
 
@@ -59,39 +58,37 @@ def getBook(id):
 @api.route("/book", methods = ["POST"])
 def addBook():
 
-    bookID = request.json["bookID"]
-    Title = request.json[]
-    Author = request.json[]
-    PublisherDate = request.json[]
+    bookID = request.json["BookID"]
+    Title = request.json["Title"]
+    Author = request.json["Author"]
+    PublisherDate = request.json["PublisherDate"]
 
-    newBook = Person(BookID = bookID, Title = Title, Author = Author, PublisherDate = PublisherDate)
+    newBook = Book(BookID = bookID, Title = Title, Author = Author, PublisherDate = PublisherDate)
 
     db.session.add(newBook)
     db.session.commit()
 
-    return personSchema.jsonify(newPerson)
+    return bookSchema.jsonify(newBook)
 
-#---
-# Up to here  : update for book
-#--
+
 # Endpoint to update person.
-@api.route("/person/<id>", methods = ["PUT"])
-def personUpdate(id):
-    person = Person.query.get(id)
-    name = request.json["name"]
+@api.route("/book/<id>", methods = ["PUT"])
+def bookUpdate(id):
+    book = Book.query.get(id)
+    title = request.json["name"]
 
-    person.Name = name
+    book.Title = title
 
     db.session.commit()
 
-    return personSchema.jsonify(person)
+    return bookSchema.jsonify(book)
 
 # Endpoint to delete person.
-@api.route("/person/<id>", methods = ["DELETE"])
-def personDelete(id):
-    person = Person.query.get(id)
+@api.route("/book/<id>", methods = ["DELETE"])
+def bookDelete(id):
+    book = Book.query.get(id)
 
     db.session.delete(person)
     db.session.commit()
 
-    return personSchema.jsonify(person)
+    return bookSchema.jsonify(person)
