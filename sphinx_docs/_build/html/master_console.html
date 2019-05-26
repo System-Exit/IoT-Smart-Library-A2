@@ -1,33 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>master_console module &#8212; PIoT Library 0.1 documentation</title>
+    
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PIoT Library 0.1 documentation" href="contents.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head><body>
+  </head>
+  <body role="document">
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="module-master_console">
@@ -35,7 +45,7 @@
 <dl class="class">
 <dt id="master_console.MasterConsole">
 <em class="property">class </em><code class="descclassname">master_console.</code><code class="descname">MasterConsole</code><span class="sig-paren">(</span><em>listen_port=65000</em><span class="sig-paren">)</span><a class="headerlink" href="#master_console.MasterConsole" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Class for handling all user interaction with the pi.</p>
 <dl class="method">
 <dt id="master_console.MasterConsole.borrow_books">
@@ -43,10 +53,10 @@
 <dd><p>Asks user for the id of the book they wish to borrow,
 creates a borrow event in database and creates a
 calendar event for the borrowed book.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>userID (str): ID of the user borrowing the book
-username (str): Username of the user borrowing the book</p>
-</dd>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>userID (str): ID of the user borrowing the book.
+username (str): Username of the user borrowing the book.</dd>
 </dl>
 </dd></dl>
 
@@ -55,18 +65,25 @@ username (str): Username of the user borrowing the book</p>
 <code class="descname">connect_to_reception</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#master_console.MasterConsole.connect_to_reception" title="Permalink to this definition">¶</a></dt>
 <dd><p>Waits for a connection to a reception pi and then waits until a
 username is sent where it will let the display_console method handle
-the user</p>
+the user.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="master_console.MasterConsole.display_console">
 <code class="descname">display_console</code><span class="sig-paren">(</span><em>userID</em>, <em>username</em>, <em>first_name</em><span class="sig-paren">)</span><a class="headerlink" href="#master_console.MasterConsole.display_console" title="Permalink to this definition">¶</a></dt>
 <dd><p>Displays console menu and gets an option from user.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>username (str): Username of the connected user.</p>
-</dd>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>userID (str): User ID of the connected user.
+username (str): Username of the connected user.
+first_name (str): first name of the connected user.</dd>
 </dl>
 </dd></dl>
+
+<dl class="method">
+<dt id="master_console.MasterConsole.keyboard_input">
+<code class="descname">keyboard_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#master_console.MasterConsole.keyboard_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="master_console.MasterConsole.return_books">
@@ -78,21 +95,32 @@ deletes the corresponding calendar event.</p>
 
 <dl class="method">
 <dt id="master_console.MasterConsole.search_books">
-<code class="descname">search_books</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#master_console.MasterConsole.search_books" title="Permalink to this definition">¶</a></dt>
+<code class="descname">search_books</code><span class="sig-paren">(</span><em>opt</em>, <em>text=False</em>, <em>voice=False</em>, <em>qr=False</em><span class="sig-paren">)</span><a class="headerlink" href="#master_console.MasterConsole.search_books" title="Permalink to this definition">¶</a></dt>
 <dd><p>Asks user to specify a property and property value, which
 is then used in a search of all books in the database and
-the result is formatted and displayed to the user</p>
+the result is formatted and displayed to the user.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>text (bool): Whether or not to search by text. Default false.
+voice (bool): Whether or not to search by voice. Default false.
+qr (bool): Whether or not to serach by QR code. Default false.</dd>
+</dl>
 </dd></dl>
+
+<dl class="method">
+<dt id="master_console.MasterConsole.search_options">
+<code class="descname">search_options</code><span class="sig-paren">(</span><em>opt</em><span class="sig-paren">)</span><a class="headerlink" href="#master_console.MasterConsole.search_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="master_console.MasterConsole.valid_date">
 <code class="descname">valid_date</code><span class="sig-paren">(</span><em>date</em><span class="sig-paren">)</span><a class="headerlink" href="#master_console.MasterConsole.valid_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if given date is valid and returns true if so, false if not.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>date (str): String of date in the format of YYYY-MM-DD.</p>
-</dd>
-<dt>Returns:</dt><dd><p>Whether or not the date is valid.</p>
-</dd>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>date (str): String of date in the format of YYYY-MM-DD.</dd>
+<dt>Returns:</dt>
+<dd>bool: Whether or not the date is valid.</dd>
 </dl>
 </dd></dl>
 
@@ -102,47 +130,33 @@ the result is formatted and displayed to the user</p>
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">PIoT Library</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-
-<div class="relations">
+        <div class="sphinxsidebarwrapper"><div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="contents.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/master_console.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
@@ -151,11 +165,11 @@ the result is formatted and displayed to the user</p>
       &copy;2019, Daniel Linford, James Laine-wyllie, Yianna Paris, Tom Plowman.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
-      <a href="_sources/master_console.rst.txt"
+      <a href="_sources/master_console.txt"
           rel="nofollow">Page source</a>
     </div>
 
