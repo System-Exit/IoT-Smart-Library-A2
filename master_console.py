@@ -275,9 +275,9 @@ class MasterConsole:
             Whether or not the date is valid.
 
         """
-        # Split date into year, month and day
-        year, month, day = date.split("-")
         try:
+            # Split date into year, month and day
+            year, month, day = date.split("-")
             # Attempt to parse the date
             datetime.datetime(int(year), int(month), int(day))
         except ValueError:
