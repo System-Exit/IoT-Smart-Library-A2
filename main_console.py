@@ -82,11 +82,25 @@ class ReceptionConsole:
                 print("Email not valid: Please try again...")
 
         #Must scan database to ensure username is unique
-        username = input("Please Enter Desired Username: ")
+        while True:
+            username = input("Please Enter Desired Username (Must Be Between 8 and 16 Characters long (Inclusive)): ")
+
+            #Username Validation
+            if(len(username) > 7 and len(username) < 17):
+                break
+            else:
+                print("Username not valid: Please try again...")
 
         #Password must be hashed for encryption
-        password = input("Please Enter Your Password: ")
-        password = self.password_encryption(password)
+        while True:
+            password = input("Please Enter Your Password (Must Contain 1 Capital, 1 Number, And Be 8 Characters Minimum): ")
+
+            #Password Validation
+            if(self.validate_password(password)):
+                password = self.password_encryption(password)
+                break
+            else:
+                print("Password not valid: Please try again...")
 
         #Information must be stored in the database
         db = local_database.LocalDatabase(LOCAL_DB_NAME)
@@ -130,6 +144,18 @@ class ReceptionConsole:
                     print("Master Pi logged out.")
                     print()
                     break
+
+    def validate_password(self, password):
+        if(any(char.isdigit() for char in password)):
+            if(len(password) > 7):
+                if(any(char.isupper() for char in password)):
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
 
 #Starts the Reception Pi
 if __name__ == "__main__":
