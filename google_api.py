@@ -167,7 +167,7 @@ class GoogleDatabaseAPI:
             cursor.execute(query, parameters)
             result = cursor.fetchone()
         # Return whether or not the book exists
-        if result is None or result[0] == "borrowed":
+        if result is None:
             return False
         else:
             return True
