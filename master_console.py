@@ -81,8 +81,6 @@ class MasterConsole:
             recoqnizer = VoiceRecognition()
             qr = QRScanner()
 
-            # Display menu
-            print()
             # Welcome user and display menu
             os.system('cls' if os.name is 'nt' else 'clear')
             print(("Welcome %s!" % first_name).center(26, ' '))
