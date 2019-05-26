@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import socket
 import google_api
 import datetime
@@ -145,7 +146,7 @@ class MasterConsole:
             opt = input("Select an option: ")
             if opt == "1":
                 # Have user enter title to search by
-                if text == True:
+                if text is True:
                     title = input("Enter partial or full book name: ")
                 clause += "Title LIKE %s"
                 values = ["%"+title+"%"]
@@ -178,9 +179,9 @@ class MasterConsole:
                 values = [date_range_low, date_range_high]
             elif opt == "4":
                 # Have user enter book ID to search by
-                if text == True:
+                if text is True:
                     book_id = input("Enter ID of book: ")
-                elif voice == True:
+                elif voice is True:
                     book_id = qr.read_barcode()
                 clause += "BookID = %s"
                 values = [book_id]
