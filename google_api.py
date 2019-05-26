@@ -212,11 +212,11 @@ class GoogleCalendarAPI:
         """
         # Load token for Google calendar API
         scope = "https://www.googleapis.com/auth/calendar"
-        store = file.Storage("token.json")
+        store = file.Storage("gc_token.json")
         creds = store.get()
         # If token file does not exist or is invalid, run through API setup
         if not creds or creds.invalid:
-            flow = client.flow_from_clientsecrets("credentials.json", scope)
+            flow = client.flow_from_clientsecrets("gc_credentials.json", scope)
             creds = tools.run_flow(flow, store)
         # Builds API service
         self.__service = build("calendar", "v3", http=creds.authorize(Http()))
