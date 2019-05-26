@@ -1,5 +1,3 @@
-# pip3 install flask flask_sqlalchemy flask_marshmallow marshmallow-sqlalchemy
-# python3 flask_main.py
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
