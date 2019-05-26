@@ -185,8 +185,8 @@ class ReceptionConsole:
 
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            print("Connecting to {}...".format(ADDRESS))
-            s.connect(ADDRESS)
+            print("Connecting to {}...".format(self.__address))
+            s.connect(self.__address)
             print("Successfully Connected")
 
             print("Logging in as {}".format(user["username"]))
