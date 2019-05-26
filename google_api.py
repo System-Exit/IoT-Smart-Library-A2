@@ -236,9 +236,9 @@ class GoogleCalendarAPI:
         # Create event with details of borrowing including book ID and user
         summary = "Book %s borrowed" % str(bookID)
         location = "RMIT PIoT Library"
-        description = "A book with an ID number of %s has \
-                       been borrowed by %s and is due to be returned \
-                       by this date." % (str(bookID), str(username))
+        description = ("A book with an ID number of %s has "
+                       "been borrowed by %s and is due to be returned "
+                       "by this date.") % (str(bookID), str(username))
         eventID = "piotbb%s" % str(book_borrow_ID)
         event = {
             "id": eventID,

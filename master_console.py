@@ -1,6 +1,7 @@
 import socket
 import google_api
 import datetime
+import os
 from socket_utils import SocketUtils
 
 
@@ -51,13 +52,12 @@ class MasterConsole:
             userID = self.__gdb.get_userID_by_username(username)
             if not userID:
                 self.__gdb.add_user(username, first_name, last_name)
-            # Welcome user and start console menu
-            print("Welcome %s!" % first_name)
+            # Start console menu
             self.display_console(userID, username, first_name)
             # Send logoff message
             SocketUtils.sendJson(conn, {"logout": "true", })
 
-    def display_console(self, userID, username, name):
+    def display_console(self, userID, username, first_name):
         """
         Displays console menu and gets an option from user.
 
@@ -66,8 +66,9 @@ class MasterConsole:
 
         """
         while True:
-            # Display menu
-            print()
+            # Welcome user and display menu
+            os.system('cls' if os.name is 'nt' else 'clear')
+            print(("Welcome %s!" % first_name).center(26, ' '))
             print("*** Library Menu ***".center(26, ' '))
             print("{0: <25}".format("Serach for a book"), "1")
             print("{0: <25}".format("Borrow a book"), "2")
@@ -180,6 +181,8 @@ class MasterConsole:
                                        str(book[3]).center(pub_date_width)))
         else:
             print("No books were found with this filter.")
+        # Wait for user to press enter before returning to menu
+        input("Press enter to return to menu.")
 
     def borrow_books(self, userID, username):
         """
