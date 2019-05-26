@@ -1,3 +1,6 @@
+# Acknowledgement:
+# The code for this class is adapted from facial recognition
+# code from the week 9 tutorial by Mathew Bolger
 import cv2
 import face_recognition
 import pickle
@@ -42,7 +45,7 @@ class FacialRecognition:
         Requires that a user has registered with facial recognition.
 
         Returns:
-            If user is recognized, returns their username.
+            If user is recognized, returns their username as a string.
             If user is recognized as unknown too many times, returns None.
 
         """
@@ -153,6 +156,7 @@ class FacialRecognition:
     def encode_images(self):
         """
         Encodes all existing images to a pickle file.
+        Name of encoding file is defined on initialization.
 
         """
         # Get a list of image paths
@@ -183,10 +187,10 @@ class FacialRecognition:
 
     def __get_camera(self):
         """
-        Starts, sets up and returns a variable to the camera for use
+        Starts, sets up and returns a variable to the camera for use.
 
         Returns:
-            A cv2 camera object that can be used for capturing images
+            A cv2 camera object that can be used for capturing images.
 
         """
         # Start camera
@@ -196,3 +200,4 @@ class FacialRecognition:
         camera.set(4, 480)
         # Return camera object
         return camera
+

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+<<<<<<< HEAD
 
+=======
+>>>>>>> development
 import library_user
 import hashlib
 import local_database
@@ -12,14 +15,8 @@ import facial_recognition
 from socket_utils import SocketUtils
 sys.path.append("..")
 
-LOCAL_DB_NAME = "library_user_database"
-
-with open("config.json", "r") as file:
-    data = json.load(file)
-
-HOSTNAME = data["MasterPi_IP"]
-PORT = 65000
-ADDRESS = (HOSTNAME, PORT)
+LOCAL_DB_NAME = "library_user_database.db"
+CONFIG_FILE_NAME = "config.json"
 
 
 class ReceptionConsole:
@@ -28,9 +25,16 @@ class ReceptionConsole:
     for connecting to the 'Master Pi'
     """
 
-    def __init__(self, send_port=65000):
-        # Specifies the port to send to
-        self.__send_port = send_port
+    def __init__(self):
+        # Check if config file is present and load it
+        if os.path.isfile(CONFIG_FILE_NAME):
+            with open(CONFIG_FILE_NAME, "r") as file:
+                data = json.load(file)
+        else:
+            print("'%s' is required to run console." % CONFIG_FILE_NAME)
+            sys.exit(1)
+        # Specifies the address to connect to
+        self.__address = (data["MasterPi_IP"], int(data["MasterPi_Port"]))
         # Initializes facial recognition
         self.__fc = facial_recognition.FacialRecognition()
 
@@ -186,8 +190,8 @@ class ReceptionConsole:
 
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            print("Connecting to {}...".format(ADDRESS))
-            s.connect(ADDRESS)
+            print("Connecting to {}...".format(self.__address))
+            s.connect(self.__address)
             print("Successfully Connected")
 
             print("Logging in as {}".format(user["username"]))

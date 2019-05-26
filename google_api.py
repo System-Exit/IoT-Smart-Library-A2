@@ -1,9 +1,15 @@
 import MySQLdb
 import json
 import datetime
+import os
+import sys
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
+
+GDB_CONFIG_FILE_NAME = "gdb_config.json"
+GC_CRED_FILE_NAME = "gc_credentials.json"
+GC_TOKEN_FILE_NAME = "gc_token.json"
 
 
 class GoogleDatabaseAPI:
@@ -18,12 +24,16 @@ class GoogleDatabaseAPI:
 
         """
         # Load config file to get database details
-        with open("gdb_config.json", "r") as jsonFile:
-            config = json.load(jsonFile)
-            host = config["host"]
-            user = config["user"]
-            password = config["password"]
-            database = config["database"]
+        if os.path.isfile(GDB_CONFIG_FILE_NAME):
+            with open(GDB_CONFIG_FILE_NAME, "r") as jsonFile:
+                config = json.load(jsonFile)
+                host = config["host"]
+                user = config["user"]
+                password = config["password"]
+                database = config["database"]
+        else:
+            print("'%s' is required for accessing google database.")
+            sys.exit(1)
 
         # Create connection to database
         self.__connection = MySQLdb.connect(host, user, password, database)
@@ -212,11 +222,11 @@ class GoogleCalendarAPI:
         """
         # Load token for Google calendar API
         scope = "https://www.googleapis.com/auth/calendar"
-        store = file.Storage("gc_token.json")
+        store = file.Storage(GC_TOKEN_FILE_NAME)
         creds = store.get()
         # If token file does not exist or is invalid, run through API setup
         if not creds or creds.invalid:
-            flow = client.flow_from_clientsecrets("gc_credentials.json", scope)
+            flow = client.flow_from_clientsecrets(GC_CRED_FILE_NAME, scope)
             creds = tools.run_flow(flow, store)
         # Builds API service
         self.__service = build("calendar", "v3", http=creds.authorize(Http()))
