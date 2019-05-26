@@ -11,10 +11,10 @@ app.config.from_object(Config)
 
 from app import routes
 # Client webpage. # Landing Page of website
+
 @site.route("/")
 def index():
-    # Use REST API.
-    #Our API is focused on books
+    
     response = requests.get("http://127.0.0.1:5000/book")
     data = json.loads(response.text)
 
