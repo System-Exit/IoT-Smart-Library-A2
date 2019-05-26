@@ -3,12 +3,9 @@
 import socket
 import google_api
 import datetime
-<<<<<<< HEAD
-import socket_utils
-from voice_ui import VoiceRecognition
-=======
 from socket_utils import SocketUtils
->>>>>>> development
+from voice_ui import VoiceRecognition
+from qr_scanner import QRScanner
 
 
 class MasterConsole:
@@ -26,14 +23,9 @@ class MasterConsole:
                 listen on. Defaults to 65000.
 
         """
-<<<<<<< HEAD
-        # Specify port to listen on
-        self.__listen_port = listen_port
-=======
         # Initialize and bind socket to listen on
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.__socket.bind(("", listen_port))
->>>>>>> development
         # Load google database API
         self.__gdb = google_api.GoogleDatabaseAPI()
         # Load google calendar API
@@ -79,31 +71,24 @@ class MasterConsole:
         """
         while True:
             recoqnizer = VoiceRecognition()
+            qr = QRScanner()
 
             # Display menu
-<<<<<<< HEAD
-            print("Hello %s" % name)
-            print("Select an option:")
-            print("1. Search a book")
-            print("2. Borrow a book")
-            print("3. Return a book")
-            # Voice UI
-            print("4. Voice Search a book")
-            print("0. Logout")
-=======
             print()
             print("*** Library Menu ***".center(26, ' '))
             print("{0: <25}".format("Serach for a book"), "1")
             print("{0: <25}".format("Borrow a book"), "2")
             print("{0: <25}".format("Return a book"), "3")
+            print("{0: <25}".format("Search by voice"), "3")
+            print("{0: <25}".format("Search by barcode"), "3")
             print("{0: <25}".format("Logout"), "0")
->>>>>>> development
 
             # Get option from user
             opt = None
             while opt is None:
                 opt = input("Select an option: ")
                 # Handle option from user
+                # TODO put in different search functionality and options here
                 if opt == "1":
                     # Let user search for a book
                     self.search_books()
@@ -116,6 +101,8 @@ class MasterConsole:
                 # Voice UI
                 elif opt == "4":
                     recoqnizer.search_books()
+                elif opt == "5":
+                    qr.search_books()
                 elif opt == "0":
                     # Logs off master pi console
                     return
