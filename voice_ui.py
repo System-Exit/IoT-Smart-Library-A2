@@ -61,8 +61,6 @@ class VoiceRecognition:
         print("What field would you like to search by?")
         print("1. Title")
         print("2. Author")
-        print("3. Publication date")
-        print("4. Book ID")
         # Get option from user
         opt = None
         while opt is None:
@@ -78,33 +76,6 @@ class VoiceRecognition:
                 author = self.voice_search()
                 clause += "Author LIKE %s"
                 values = ["%"+author+"%"]
-            elif opt == "3":
-                # Have user enter date range to search by
-                valid_input = False
-                while not valid_input:
-                    date_range_low = input(
-                        "Enter publication date low range(yyyy-mm-dd): ")
-                    if(self.valid_date(date_range_low)):
-                        valid_input = True
-                    else:
-                        print("Date is invalid.")
-                valid_input = False
-                while not valid_input:
-                    date_range_high = input(
-                        "Enter publication date high range(yyyy-mm-dd): ")
-                    if(self.valid_date(date_range_high)):
-                        valid_input = True
-                    else:
-                        print("Date is invalid.")
-                clause += "PublishedDate BETWEEN \
-                          CAST(%s AS DATE) AND \
-                          CAST(%s AS DATE)"
-                values = [date_range_low, date_range_high]
-            elif opt == "4":
-                # Have user enter book ID to search by
-                book_id = input("Enter ID of book: ")
-                clause += "BookID = %s"
-                values = [book_id]
             else:
                 print("Invalid option.")
                 opt = None
@@ -135,25 +106,3 @@ class VoiceRecognition:
                                        str(book[3]).center(pub_date_width)))
         else:
             print("No books were found with this filter.")
-
-    def valid_date(self, date):
-        """
-        Checks if given date is valid and returns true if so, false if not.
-
-        Args:
-            date (str): String of date in the format of YYYY-MM-DD.
-
-        Returns:
-            Whether or not the date is valid.
-
-        """
-        # Split date into year, month and day
-        year, month, day = date.split("-")
-        try:
-            # Attempt to parse the date
-            datetime.datetime(int(year), int(month), int(day))
-        except ValueError:
-            # Parse failed, so return false
-            return False
-        # Parse was successful, so return true
-        return True
