@@ -4,6 +4,7 @@ import datetime
 import os
 import sys
 from socket_utils import SocketUtils
+from qr_scanner import QRScanner
 
 
 class MasterConsole:
@@ -78,15 +79,16 @@ class MasterConsole:
 
         """
         while True:
+            qr = QRScanner()
             # Welcome user and display menu
             os.system('cls' if os.name is 'nt' else 'clear')
             print(("Welcome %s!" % first_name).center(26, ' '))
             print("*** Library Menu ***".center(26, ' '))
-            print("{0: <25}".format("Serach for a book"), "1")
+            print("{0: <25}".format("Search for a book"), "1")
             print("{0: <25}".format("Borrow a book"), "2")
             print("{0: <25}".format("Return a book"), "3")
             print("{0: <25}".format("Search by voice"), "4")
-            print("{0: <25}".format("Search by barcode"), "5")
+            print("{0: <25}".format("Search by QR code"), "5")
             print("{0: <25}".format("Logout"), "0")
 
             # Get option from user
@@ -105,7 +107,9 @@ class MasterConsole:
                     self.return_books()
                 # Voice UI
                 elif opt == "4":
-                    recoqnizer.search_books()
+                    print("Sorry, this isn't working right now.")
+                    opt = None
+                    # recoqnizer.search_books()
                 elif opt == "5":
                     # just call search books from qr function here
                     # get it working
@@ -235,7 +239,22 @@ class MasterConsole:
 
         """
         # Ask the user for the ID of the book they would like to borrow
-        bookID = input("Enter the ID of book you would like to borrow: ")
+        qr = QRScanner()
+        print("{0: <25}".format("Search by ID"), "1")
+        print("{0: <25}".format("Search by QR code"), "2")
+        print("{0: <25}".format("Go back"), "0")
+
+        # Ask the user for the ID of the book they are returning
+        opt = None
+        while opt is None:
+            opt = input("Select an option: ")
+            # Handle option from user
+            if opt == "1":
+                # User enters ID of book
+                bookID = input("Enter the ID of book you would like to borrow: ")
+            elif opt == "2":
+                # User scans QR code
+                bookID = qr.read_barcode()
         # Check that a book with that ID exists
         if not self.__gdb.check_book_exists(bookID):
             # Inform the user that the book does not exist
@@ -273,8 +292,24 @@ class MasterConsole:
 
 
         """
+        qr = QRScanner()
+        print("{0: <25}".format("Search by ID"), "1")
+        print("{0: <25}".format("Search by QR code"), "2")
+        print("{0: <25}".format("Go back"), "0")
+
         # Ask the user for the ID of the book they are returning
-        bookID = input("Enter the ID of the book you are returning: ")
+        opt = None
+        while opt is None:
+            opt = input("Select an option: ")
+            # Handle option from user
+            if opt == "1":
+                # User enters ID of book
+                bookID = input("Enter the ID of the book you are returning: ")
+            elif opt == "2":
+                # User scans QR code
+                bookID = qr.read_barcode()
+        
+        
         # Check that a book with that ID exists
         if not self.__gdb.check_book_exists(bookID):
             # Inform the user that the book does not exist

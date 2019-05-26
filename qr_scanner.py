@@ -5,10 +5,13 @@
 
 from imutils.video import VideoStream
 from pyzbar import pyzbar
+import google_api
 import datetime
 import imutils
 import time
 import cv2
+import os
+import sys
 
 class QRScanner:
     """
@@ -23,7 +26,8 @@ class QRScanner:
         Should accept arg for path or link for QR codes.
 
         """
-        pass
+        # Load google database API
+        self.__gdb = google_api.GoogleDatabaseAPI()
 
     def read_barcode(self):
         print("[INFO] starting video stream...")
@@ -50,8 +54,7 @@ class QRScanner:
             # if the barcode text has not been seen before print it and update the set
             if barcodeData not in found:
                 print("[FOUND] Type: {}, Data: {}".format(barcodeType, barcodeData))
-                found.add(barcodeData)
-            
+                found.add(barcodeData)          
 
         # Stop the video stream
         print("[INFO] closing video stream...")
