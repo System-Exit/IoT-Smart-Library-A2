@@ -5,8 +5,11 @@ import os, requests, json
 
 site = Blueprint("site", __name__)
 
-# Client webpage. # Landing Page of website
+app = Flask(__name__)
+app.config.from_object(Config)
 
+from app import routes
+# Client webpage. # Landing Page of website
 @site.route("/")
 def index():
     # Use REST API.
