@@ -1,19 +1,12 @@
 #!/usr/bin/env python3
-<<<<<<< HEAD
-
-=======
->>>>>>> development
 import socket
 import google_api
 import datetime
 import os
 import sys
 from socket_utils import SocketUtils
-<<<<<<< HEAD
-from voice_ui import VoiceRecognition
-=======
->>>>>>> development
 from qr_scanner import QRScanner
+from voice_ui import VoiceRecognition
 
 
 class MasterConsole:
@@ -88,13 +81,8 @@ class MasterConsole:
 
         """
         while True:
-<<<<<<< HEAD
-            recoqnizer = VoiceRecognition()
             qr = QRScanner()
-
-=======
-            qr = QRScanner()
->>>>>>> development
+            recognizer = VoiceRecognition()
             # Welcome user and display menu
             os.system('cls' if os.name is 'nt' else 'clear')
             print(("Welcome %s!" % first_name).center(26, ' '))
@@ -102,13 +90,8 @@ class MasterConsole:
             print("{0: <25}".format("Search for a book"), "1")
             print("{0: <25}".format("Borrow a book"), "2")
             print("{0: <25}".format("Return a book"), "3")
-<<<<<<< HEAD
-            print("{0: <25}".format("Search by voice"), "3")
-            print("{0: <25}".format("Search by barcode"), "3")
-=======
             print("{0: <25}".format("Search by voice"), "4")
             print("{0: <25}".format("Search by QR code"), "5")
->>>>>>> development
             print("{0: <25}".format("Logout"), "0")
 
             # Get option from user
@@ -128,20 +111,14 @@ class MasterConsole:
                     self.return_books()
                 # Voice UI
                 elif opt == "4":
-<<<<<<< HEAD
+                    # print("Sorry, this isn't working right now.")
+                    # opt = None
                     recoqnizer.search_books()
-                elif opt == "5":
-                    qr.search_books()
-=======
-                    print("Sorry, this isn't working right now.")
-                    opt = None
-                    # recoqnizer.search_books()
                 elif opt == "5":
                     # just call search books from qr function here
                     # get it working
                     string = qr.read_barcode()
                     qr.search_books(string)
->>>>>>> development
                 elif opt == "0":
                     # Logs off master pi console
                     return
