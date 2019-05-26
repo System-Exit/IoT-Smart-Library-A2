@@ -88,7 +88,7 @@ def bookUpdate(id):
 def bookDelete(id):
     book = Book.query.get(id)
 
-    db.session.delete(person)
+    db.session.delete(book)
     db.session.commit()
 
-    return bookSchema.jsonify(person)
+    return bookSchema.jsonify(book)
