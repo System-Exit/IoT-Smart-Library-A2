@@ -29,7 +29,7 @@ class ReceptionConsole:
             print("'%s' is required to run console." % CONFIG_FILE_NAME)
             sys.exit(1)
         # Specifies the address to connect to
-        self.__address = (data["MasterPi_IP"], data["MasterPi_Port"])
+        self.__address = (data["MasterPi_IP"], int(data["MasterPi_Port"]))
         # Initializes facial recognition
         self.__fc = facial_recognition.FacialRecognition()
 
