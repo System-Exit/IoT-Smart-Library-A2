@@ -9,6 +9,7 @@ import datetime
 import imutils
 import time
 import cv2
+import google_api
 
 class QRScanner:
     """
@@ -23,7 +24,7 @@ class QRScanner:
         Should accept arg for path or link for QR codes.
 
         """
-        pass
+        self.__gdb = google_api.GoogleDatabaseAPI()
 
     def read_barcode(self):
         print("[INFO] starting video stream...")
@@ -60,6 +61,50 @@ class QRScanner:
         vs.stop()
         print(barcodeData)
         return barcodeData
+
+    def search_books(self):
+        """
+        Asks user to specify a property and property value, which
+        is then used in a search of all books in the database and
+        the result is formatted and displayed to the user
+
+        """
+        # Initialize clause for search
+        clause = ""
+
+        # Get option from user
+
+        # Have user enter book ID to search by
+        book_id = self.read_barcode()
+        clause += "BookID = %s"
+        values = [book_id]
+
+        # Query the books database for all books that satisfy conditions
+        print("Search the GDB")
+        results = self.__gdb.search_books(clause, values)
+        if results:
+            # Build formatting rules
+            id_width = max(max(len(str(x[0])) for x in results),
+                        len("ID"))
+            title_width = max(max(len(str(x[1])) for x in results),
+                            len("Title"))
+            author_width = max(max(len(str(x[2])) for x in results),
+                            len("Author"))
+            pub_date_width = len("Publish Date")
+            total_width = id_width+title_width+author_width+pub_date_width+3
+            # Display all options on screen
+            print("%s|%s|%s|%s" % ("ID".center(id_width),
+                                "Title".center(title_width),
+                                "Author".center(author_width),
+                                "Publish Date".center(pub_date_width)))
+            print('-'*total_width)
+            for book in results:
+                print("%s|%s|%s|%s" % (str(book[0]).rjust(id_width),
+                                    str(book[1]).ljust(title_width),
+                                    str(book[2]).ljust(author_width),
+                                    str(book[3]).center(pub_date_width)))
+        else:
+            print("No books were found with this filter.")
 
 
     def __init_video_stream(self):
