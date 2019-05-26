@@ -2,6 +2,7 @@ from flask import Flask, Blueprint, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
+from config import Config
 
 site = Blueprint("site", __name__)
 

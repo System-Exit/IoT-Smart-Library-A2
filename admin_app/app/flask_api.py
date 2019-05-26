@@ -4,7 +4,7 @@ from flask_marshmallow import Marshmallow
 import os, requests, json
 from flask import current_app as app
 
-api = Blueprint("api", __name__) #TODO Check what this does
+api = Blueprint("api", __name__) 
 
 app = Flask(__name__)
 
@@ -18,8 +18,8 @@ class Book(db.Model):
     __tablename__ = "Book"
     BookID = db.Column(db.Integer, primary_key = True, autoincrement = True)
     Title = db.Column(db.Text, nullable = False)
-    Author = db.Column(db.text, nullable = False)
-    PublisherDate = db.cloumn(db.date, nullable = False)    
+    Author = db.Column(db.Text, nullable = False)
+    PublisherDate = db.Column(db.Date, nullable = False)    
 
     def __init__(self, BookID, Title, Author, PublisherDate):
         self.BookID = BookID

@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
 from app.flask_api import api, db
-from app.__init__.py import site
+from app import site
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
