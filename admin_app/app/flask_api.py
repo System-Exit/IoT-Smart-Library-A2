@@ -6,21 +6,27 @@ from flask import current_app as app
 
 api = Blueprint("api", __name__)
 
-db = SQLAlchemy()
+app = Flask(__name__)
+
+db = SQLAlchemy(app)
 ma = Marshmallow()
 
 #Change all these API calls to reflect our book table
 
 # Declaring the model.
-class Person(db.Model):
-    __tablename__ = "Person"
-    PersonID = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    Name = db.Column(db.Text)
+class Book(db.Model):
+    __tablename__ = "Book"
+    BookID = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    Title = db.Column(db.Text, nullable = False)
+    Author = db.Column(db.text, nullable = False)
+    PublisherDate = db.cloumn(db.date, nullable = False)    
     # Username = db.Column(db.String(256), unique = True)
 
-    def __init__(self, Name, PersonID = None):
-        self.PersonID = PersonID
-        self.Name = Name
+    def __init__(self, BookID, Title, Author, PublisherDate):
+        self.BookID = BookID
+        self.Title = Title
+        self.Author = Author
+        self.PublisherDate = PublisherDate
 
 class PersonSchema(ma.Schema):
     # Reference: https://github.com/marshmallow-code/marshmallow/issues/377#issuecomment-261628415
@@ -29,38 +35,45 @@ class PersonSchema(ma.Schema):
     
     class Meta:
         # Fields to expose.
-        fields = ("PersonID", "Name")
+        fields = ("BookID", "Title", "Author", "PubisherDate")
 
-personSchema = PersonSchema()
-personsSchema = PersonSchema(many = True)
+bookSchema = PersonSchema()
+bookSchema = PersonSchema(many = True)
 
-# Endpoint to show all people.
-@api.route("/person", methods = ["GET"])
-def getPeople():
-    people = Person.query.all()
-    result = personsSchema.dump(people)
+# Endpoint to show all books.
+@api.route("/book", methods = ["GET"])
+def getBooks():
+    book = Book.query.all()
+    result = bookSchema.dump(people)
 
     return jsonify(result.data)
 
-# Endpoint to get person by id.
-@api.route("/person/<id>", methods = ["GET"])
-def getPerson(id):
-    person = Person.query.get(id)
+# Endpoint to get book by id.
+@api.route("/book/<id>", methods = ["GET"])
+def getBook(id):
+    person = Book.query.get(id)
 
-    return personSchema.jsonify(person)
+    return bookSchema.jsonify(person)
 
-# Endpoint to create new person.
-@api.route("/person", methods = ["POST"])
-def addPerson():
-    name = request.json["name"]
+# Endpoint to create new book.
+@api.route("/book", methods = ["POST"])
+def addBook():
 
-    newPerson = Person(Name = name)
+    bookID = request.json["bookID"]
+    Title = request.json[]
+    Author = request.json[]
+    PublisherDate = request.json[]
 
-    db.session.add(newPerson)
+    newBook = Person(BookID = bookID, Title = Title, Author = Author, PublisherDate = PublisherDate)
+
+    db.session.add(newBook)
     db.session.commit()
 
     return personSchema.jsonify(newPerson)
 
+#---
+# Up to here  : update for book
+#--
 # Endpoint to update person.
 @api.route("/person/<id>", methods = ["PUT"])
 def personUpdate(id):

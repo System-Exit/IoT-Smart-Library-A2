@@ -11,10 +11,10 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Update HOST and PASSWORD appropriately.
-HOST = ""
-USER = "root"
-PASSWORD = ""
-DATABASE = ""
+HOST = "35.244.106.216"
+USER = "masterpi"
+PASSWORD = "ipretsam"
+DATABASE = "Library"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
