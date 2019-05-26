@@ -109,12 +109,12 @@ class ReceptionConsole:
         # Information must be stored in the database
         db = local_database.LocalDatabase(LOCAL_DB_NAME)
 
-        if db.insert_new_user(first_name, last_name, email,
-                              username, password) is 1:
+        result = db.insert_new_user(first_name, last_name, email,
+                                    username, password)
+        if result is 1:
             print("Username Already Exists, Please Try Another")
 
-        elif db.insert_new_user(first_name, last_name, email,
-                                username, password) is 2:
+        elif result is 2:
             print("Email Already Exists")
 
         else:
