@@ -18,27 +18,27 @@ In order to run the web app locally, several dependendencies are required:
 We will run a virtual environment to keep these packages seperate from our
 global environment
 
-  * $ python3 -m env env
+```bash
+$ python3 -m env env
+```
 
 Activate the virtual environment via:
 
-  * $ source venv/bin/activate
+```bash
+$ source venv/bin/activate
+```
 
-While the virtual environment is activated:
+While the virtual environment is activated, install the following via pip:
   
-  Installed via pip
-    
-    * $ pip3 install <flask>
-    * $ pip3 install <flask_wtf>
+```bash
+> pip3 install <flask>
+> pip3 install <flask_wtf>
+```
 
-  In order to run the web app, in the admin_app directory:
-
-    * $ flask run 
+  In order to run the web app, while in the admin_app directory, type `flask run`
 
   The home page can be accessed via the address shown, while
-  the server is active:
-
-    * The server can be shutdown via ctrl-c
+  the server is active, the server can be shutdown by typing `ctrl-c`
 
 In order to deactivate the virtual environment:
 ```bash
