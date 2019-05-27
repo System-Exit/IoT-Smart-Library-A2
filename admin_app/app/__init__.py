@@ -12,11 +12,10 @@ app.config.from_object(Config)
 from app import routes
 # Client webpage. # Landing Page of website
 
-@site.route("/login")
-def index():
+@site.route("/")
+def home():
     
     #response = requests.get("http://127.0.0.1:5000/")
     # data = json.loads(response.text)
 
-    return render_template("index.html")
-    
+    return render_template("home.html")
