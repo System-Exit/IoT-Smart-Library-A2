@@ -35,12 +35,11 @@ While the virtual environment is activated, install the following via pip:
 > pip3 install <flask_wtf>
 ```
 
-  In order to run the web app, while in the admin_app directory, type `flask run`
-
-  The home page can be accessed via the address shown, while
-  the server is active, the server can be shutdown by typing `ctrl-c`
+  In order to run the web app, while in the admin_app directory, type `flask run`. The home page can be accessed via the address shown, while
+  the server is active, the server can be shutdown by typing `ctrl-c`.
 
 In order to deactivate the virtual environment:
+
 ```bash
 $ deactivate
 ```
@@ -64,3 +63,16 @@ An extra option is present in the main menu, so that the QR reader can scan a co
 ### Return a book
 
 An extra option is present to allow a user to return a book by scanning the QR code.
+
+
+## Voice Recognition
+
+Voice Recognition for the smart library is used to search for books either by title or author. The project uses Google Speech-to-text with the default API for testing purposes. Rather than constantly streaming for voice input, the voice is invoked when needed (such as searching for a book by title or authoer), where the microphone will power on. The microphone adjusts for ambient noise, so it's important to give it a short second to adjust the threshold, before speaking into the microphone.
+
+Google Speech Recognition will convert your speech to text, which will appear as a message on screen before automatically searching the the library's Google Database for a matchin result.
+
+As we are using the Raspberry Pi for this prototype, we will need advanced access to the various cards and devices on our system, specifically the input (microphone) and output (speaker or headset in the 3.5mm jack on the Raspberry Pi).
+
+The following website has been used to help set up the `.asroundrc` file which should be placed in `/home/pi`:
+
+[https://developers.google.com/assistant/sdk/guides/service/python/embed/audio](https://developers.google.com/assistant/sdk/guides/service/python/embed/audio)
