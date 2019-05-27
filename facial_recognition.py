@@ -1,13 +1,17 @@
+# Acknowledgement:
+# The code for this class is adapted from facial recognition
+# code from the week 9 tutorial by Mathew Bolger
 import cv2
 import face_recognition
 import pickle
 import os
 import time
+import imutils
 from imutils import paths
 from imutils.video import VideoStream
 
 
-class Facial_recognition:
+class FacialRecognition:
     """
     Class for handling facial recognition functionality.
 
@@ -28,9 +32,6 @@ class Facial_recognition:
                 when encoding and recognizing faces. Default is "hog".
 
         """
-        # Check if facial data directory exists, creating one if not
-        if not os.path.exists(data_dir):
-            os.makedirs(data_dir)
         # Specify location of facial data
         self.__data_dir = data_dir
         # Specify file name of encodings storage
@@ -44,7 +45,7 @@ class Facial_recognition:
         Requires that a user has registered with facial recognition.
 
         Returns:
-            If user is recognized, returns their username.
+            If user is recognized, returns their username as a string.
             If user is recognized as unknown too many times, returns None.
 
         """
@@ -96,29 +97,37 @@ class Facial_recognition:
                     unknown_count += 1
                 # If they are as any other user, immediately return that user
                 else:
+                    vs.stop()
                     return name
             # If unknown count has reached the limit, simply return None
             if unknown_count >= 10:
+                vs.stop()
                 return None
 
     def register_user(self, username):
         """
         Registers a user in the facial recognition database.
-        First captures 10 images from user and writes them to file.
+        First captures 10 images from user and writes them to file,
         Then encodes the images and stores encoding in a pickle file.
+        This does require the user to press enter for each image taken,
+        and takes 10 images before calling encoding method and finishing.
 
         Args:
             username (str): The username of the user that will be registered.
 
         """
         # Start up camera
-        camera = self.get_camera()
+        camera = self.__get_camera()
         # Load prebuilt classifier for face detection
         face_detector = cv2.CascadeClassifier(
             "haarcascade_frontalface_default.xml")
+        # Create folder for images
+        folder = "%s/%s" % (self.__data_dir, username)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
         # Capture face images until sufficent number is written
         img_count = 0
-        while img_count <= 10:
+        while img_count < 10:
             # Wait for user to press enter before capturing image
             key = input("Press enter to capture image %d" % (img_count + 1))
             # Capture frame
@@ -137,17 +146,20 @@ class Facial_recognition:
             # Write faces to file
             for (x, y, w, h) in faces:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                img_name = "%s/%d" % (self.__data_dir, img_count)
-                cv2.imwrite(img_name, frame[y: y + h, x: x + w])
+                img_path = "%s/%d.jpg" % (folder, img_count)
+                cv2.imwrite(img_path, frame[y: y + h, x: x + w])
                 img_count += 1
         # Release camera
         camera.release()
         # Do encoding of all images
+        print("Please wait for encoding to complete...")
         self.encode_images()
 
     def encode_images(self):
         """
         Encodes all existing images to a pickle file.
+        This pickle file is used for facial recognition.
+        Name of encoding file is defined on initialization.
 
         """
         # Get a list of image paths
@@ -166,7 +178,7 @@ class Facial_recognition:
             boxes = face_recognition.face_locations(rgb_image,
                                                     model=self.__detect_model)
             # Compute facial embedding for faces
-            encodings = face_recognition.face_locations(rgb_image, boxes)
+            encodings = face_recognition.face_encodings(rgb_image, boxes)
             # Add encodings to encoding list alongside associate username
             for encoding in encodings:
                 allEncodings.append(encoding)
@@ -176,12 +188,12 @@ class Facial_recognition:
         with open(self.__encodings_path, "wb") as encode_file:
             encode_file.write(pickle.dumps(data))
 
-    def get_camera(self):
+    def __get_camera(self):
         """
-        Starts, sets up and returns a variable to the camera for use
+        Starts, sets up and returns a variable to the camera for use.
 
         Returns:
-            A cv2 camera object that can be used for capturing images
+            A cv2 camera object that can be used for capturing images.
 
         """
         # Start camera

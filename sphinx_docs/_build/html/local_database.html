@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>local_database module &#8212; PIoT Library 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PIoT Library 0.1 documentation" href="contents.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-local_database">
+<span id="local-database-module"></span><h1>local_database module<a class="headerlink" href="#module-local_database" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="local_database.LocalDatabase">
+<em class="property">class </em><code class="descclassname">local_database.</code><code class="descname">LocalDatabase</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#local_database.LocalDatabase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Class for handling local database operations.</p>
+<dl class="method">
+<dt id="local_database.LocalDatabase.check_user_exists">
+<code class="descname">check_user_exists</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#local_database.LocalDatabase.check_user_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if user exists in database or not.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>username (str): Username of user to check for.</dd>
+<dt>Retruns:</dt>
+<dd>True if user exists, False if user does not exist.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="local_database.LocalDatabase.get_user_info">
+<code class="descname">get_user_info</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#local_database.LocalDatabase.get_user_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries database for user information and dict including
+usrename, firstname, lastname, and email</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>username (str): Username of the user to get data of.</dd>
+<dt>Returns:</dt>
+<dd>Dictionary object of all specified user data from database.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="local_database.LocalDatabase.insert_new_user">
+<code class="descname">insert_new_user</code><span class="sig-paren">(</span><em>first_name</em>, <em>last_name</em>, <em>email</em>, <em>username</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#local_database.LocalDatabase.insert_new_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts the new user details into the database
+after verifying that &#8216;username&#8217; and &#8216;email&#8217; are unique.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>first_name (str): First name of user.
+last_name (str): Last name of user.
+email (str): Email of user.
+username (str): Username of user.
+password (str): Hashed password of user.</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>int: 1 if user with username already exists.</dt>
+<dd>2 id user with email already exists.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="local_database.LocalDatabase.verify_login">
+<code class="descname">verify_login</code><span class="sig-paren">(</span><em>username</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#local_database.LocalDatabase.verify_login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the user if the entered username and password is a match.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>username (str): User to verify password of.
+password (str): Hashed password to verify.</dd>
+<dt>Returns:</dt>
+<dd>Dictionary object of all specified user data from database if
+successfully verified, false if not.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="contents.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/local_database.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Daniel Linford, James Laine-wyllie, Yianna Paris, Tom Plowman.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/local_database.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
