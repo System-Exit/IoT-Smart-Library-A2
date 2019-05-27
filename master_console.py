@@ -36,7 +36,7 @@ class MasterConsole:
         """
         Waits for a connection to a reception pi and then waits until a
         username is sent where it will let the display_console method handle
-        the user
+        the user.
 
         """
         # Listen for reception pi
@@ -77,7 +77,9 @@ class MasterConsole:
         Displays console menu and gets an option from user.
 
         Args:
+            userID (str): User ID of the connected user.
             username (str): Username of the connected user.
+            first_name (str): first name of the connected user.
 
         """
         while True:
@@ -141,7 +143,12 @@ class MasterConsole:
         """
         Asks user to specify a property and property value, which
         is then used in a search of all books in the database and
-        the result is formatted and displayed to the user
+        the result is formatted and displayed to the user.
+
+        Args:
+            text (bool): Whether or not to search by text. Default false.
+            voice (bool): Whether or not to search by voice. Default false.
+            qr (bool): Whether or not to serach by QR code. Default false.
 
         """
         # Initialize clause for search
@@ -239,8 +246,8 @@ class MasterConsole:
         calendar event for the borrowed book.
 
         Args:
-            userID (str): ID of the user borrowing the book
-            username (str): Username of the user borrowing the book
+            userID (str): ID of the user borrowing the book.
+            username (str): Username of the user borrowing the book.
 
         """
         # Ask the user for the ID of the book they would like to borrow
@@ -256,7 +263,8 @@ class MasterConsole:
             # Handle option from user
             if opt == "1":
                 # User enters ID of book
-                bookID = input("Enter the ID of book you would like to borrow: ")
+                bookID = input("Enter the ID of book you ",
+                               "would like to borrow: ")
             elif opt == "2":
                 # User scans QR code
                 bookID = qr.read_barcode()
@@ -313,8 +321,7 @@ class MasterConsole:
             elif opt == "2":
                 # User scans QR code
                 bookID = qr.read_barcode()
-        
-        
+
         # Check that a book with that ID exists
         if not self.__gdb.check_book_exists(bookID):
             # Inform the user that the book does not exist
@@ -351,7 +358,7 @@ class MasterConsole:
             date (str): String of date in the format of YYYY-MM-DD.
 
         Returns:
-            Whether or not the date is valid.
+            bool: Whether or not the date is valid.
 
         """
         try:

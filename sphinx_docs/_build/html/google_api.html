@@ -1,33 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>google_api module &#8212; PIoT Library 0.1 documentation</title>
+    
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PIoT Library 0.1 documentation" href="contents.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head><body>
+  </head>
+  <body role="document">
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="module-google_api">
@@ -35,17 +45,17 @@
 <dl class="class">
 <dt id="google_api.GoogleCalendarAPI">
 <em class="property">class </em><code class="descclassname">google_api.</code><code class="descname">GoogleCalendarAPI</code><a class="headerlink" href="#google_api.GoogleCalendarAPI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Class for handling operations with google calendar.</p>
 <dl class="method">
 <dt id="google_api.GoogleCalendarAPI.add_borrow_event">
 <code class="descname">add_borrow_event</code><span class="sig-paren">(</span><em>book_borrow_ID</em>, <em>bookID</em>, <em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#google_api.GoogleCalendarAPI.add_borrow_event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a new borrow calendar event for a borrowed book.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>book_borrow_ID (str): ID that will be inlcuded in event ID
-bookID (str): ID of the book that is being borrowed
-username (str): Username of the user borrowing the book</p>
-</dd>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>book_borrow_ID (str): ID that will be inlcuded in event ID.
+bookID (str): ID of the book that is being borrowed.
+username (str): Username of the user borrowing the book.</dd>
 </dl>
 </dd></dl>
 
@@ -53,9 +63,9 @@ username (str): Username of the user borrowing the book</p>
 <dt id="google_api.GoogleCalendarAPI.remove_borrow_event">
 <code class="descname">remove_borrow_event</code><span class="sig-paren">(</span><em>book_borrowed_ID</em><span class="sig-paren">)</span><a class="headerlink" href="#google_api.GoogleCalendarAPI.remove_borrow_event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes an existing borrow calendar event for a book.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>book_borrowed_ID (str): ID of the book borrow entry in GDB</p>
-</dd>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>book_borrowed_ID (str): ID of the book borrow entry in GDB.</dd>
 </dl>
 </dd></dl>
 
@@ -64,20 +74,20 @@ username (str): Username of the user borrowing the book</p>
 <dl class="class">
 <dt id="google_api.GoogleDatabaseAPI">
 <em class="property">class </em><code class="descclassname">google_api.</code><code class="descname">GoogleDatabaseAPI</code><a class="headerlink" href="#google_api.GoogleDatabaseAPI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>”
-Class for handling API calls to the Google cloud database</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>&#8221;
+Class for handling API calls to the Google cloud database.</p>
 <dl class="method">
 <dt id="google_api.GoogleDatabaseAPI.add_user">
 <code class="descname">add_user</code><span class="sig-paren">(</span><em>username</em>, <em>first_name</em>, <em>last_name</em><span class="sig-paren">)</span><a class="headerlink" href="#google_api.GoogleDatabaseAPI.add_user" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds a new user to the database with given username and name</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>username (str): Username of the user
-first_name (str): First name of the user
-last_name (str): Last name of the user</p>
-</dd>
-<dt>Returns:</dt><dd><p>The ID of the newly added user</p>
-</dd>
+<dd><p>Adds a new user to the database with given username and name.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>username (str): Username of the user.
+first_name (str): First name of the user.
+last_name (str): Last name of the user.</dd>
+<dt>Returns:</dt>
+<dd>str: The ID of the newly added user.</dd>
 </dl>
 </dd></dl>
 
@@ -85,11 +95,14 @@ last_name (str): Last name of the user</p>
 <dt id="google_api.GoogleDatabaseAPI.check_book_borrowed">
 <code class="descname">check_book_borrowed</code><span class="sig-paren">(</span><em>bookID</em><span class="sig-paren">)</span><a class="headerlink" href="#google_api.GoogleDatabaseAPI.check_book_borrowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Queries the database to check if the book is currently borrowed.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>bookID (str): The ID of the book to check</p>
-</dd>
-<dt>Returns:</dt><dd><p>True and BookBorrowedID if book is currently borrowed.
-False and None if book is not currently borrowed.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>bookID (str): The ID of the book to check</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>bool: True and BookBorrowedID if book is currently borrowed.</dt>
+<dd>False and None if book is not currently borrowed.</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -98,46 +111,46 @@ False and None if book is not currently borrowed.</p>
 <dt id="google_api.GoogleDatabaseAPI.check_book_exists">
 <code class="descname">check_book_exists</code><span class="sig-paren">(</span><em>bookID</em><span class="sig-paren">)</span><a class="headerlink" href="#google_api.GoogleDatabaseAPI.check_book_exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Queries the database to check if the book with ID exists.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>bookID (str): The ID of the book to check</p>
-</dd>
-<dt>Returns:</dt><dd><p>bool: True if book with ID exists, False otherwise.</p>
-</dd>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>bookID (str): The ID of the book to check.</dd>
+<dt>Returns:</dt>
+<dd>bool: True if book with ID exists, False otherwise.</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="google_api.GoogleDatabaseAPI.create_borrow_entry">
 <code class="descname">create_borrow_entry</code><span class="sig-paren">(</span><em>bookID</em>, <em>userID</em><span class="sig-paren">)</span><a class="headerlink" href="#google_api.GoogleDatabaseAPI.create_borrow_entry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a borrow entry for a given book in database</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>bookID (str): ID of the book to create borrow entry for
-userID (str): ID of user that will be borrowing the book</p>
-</dd>
-<dt>Returns:</dt><dd><p>The generated ID for the book borrow entry</p>
-</dd>
+<dd><p>Create a borrow entry for a given book in database.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>bookID (str): ID of the book to create borrow entry for.
+userID (str): ID of user that will be borrowing the book.</dd>
+<dt>Returns:</dt>
+<dd>str: The generated ID for the book borrow entry.</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="google_api.GoogleDatabaseAPI.get_userID_by_username">
 <code class="descname">get_userID_by_username</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#google_api.GoogleDatabaseAPI.get_userID_by_username" title="Permalink to this definition">¶</a></dt>
-<dd><p>Queries the database for a user by the given name and gets their ID</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>username (str): Username of the user to get ID of</p>
-</dd>
-<dt>Returns:</dt><dd><p>The ID of the given user if they exits, None otherwise.</p>
-</dd>
+<dd><p>Queries the database for a user by the given name and gets their ID.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>username (str): Username of the user to get ID of.</dd>
+<dt>Returns:</dt>
+<dd>str: The ID of the given user if they exits, None otherwise.</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="google_api.GoogleDatabaseAPI.return_borrow_entry">
 <code class="descname">return_borrow_entry</code><span class="sig-paren">(</span><em>book_borrowed_ID</em><span class="sig-paren">)</span><a class="headerlink" href="#google_api.GoogleDatabaseAPI.return_borrow_entry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update a borrow entry status field to “returned”</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>book_borrowed_ID (str): ID of borrow event to update</p>
-</dd>
+<dd><p>Update a borrow entry status field to &#8220;returned&#8221;</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>book_borrowed_ID (str): ID of borrow event to update.</dd>
 </dl>
 </dd></dl>
 
@@ -146,16 +159,17 @@ userID (str): ID of user that will be borrowing the book</p>
 <code class="descname">search_books</code><span class="sig-paren">(</span><em>clause=None</em>, <em>parameters=None</em><span class="sig-paren">)</span><a class="headerlink" href="#google_api.GoogleDatabaseAPI.search_books" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search the books table with given WHERE clause and parameters and
 returns the result.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>clause (:obj: <cite>str</cite>, optional): WHERE clause in SQL syntax that</dt><dd><p>the clause will use. Default is none.</p>
-</dd>
-<dt>parameters (<code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, optional):</dt><dd><p>The parameters of a parameterized query. Default is none.</p>
-</dd>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>clause (:obj: <cite>str</cite>, optional): WHERE clause in SQL syntax that</dt>
+<dd>the clause will use. Default is none.</dd>
+<dt>parameters (<code class="xref py py-obj docutils literal"><span class="pre">tuple</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">str</span></code>, optional):</dt>
+<dd>The parameters of a parameterized query. Default is none.</dd>
 </dl>
 </dd>
-<dt>Returns:</dt><dd><p>The results of the query as a list of tuples</p>
-</dd>
+<dt>Returns:</dt>
+<dd>The results of the query as a list of tuples.</dd>
 </dl>
 </dd></dl>
 
@@ -165,47 +179,33 @@ returns the result.</p>
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">PIoT Library</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-
-<div class="relations">
+        <div class="sphinxsidebarwrapper"><div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="contents.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/google_api.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
@@ -214,11 +214,11 @@ returns the result.</p>
       &copy;2019, Daniel Linford, James Laine-wyllie, Yianna Paris, Tom Plowman.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
-      <a href="_sources/google_api.rst.txt"
+      <a href="_sources/google_api.txt"
           rel="nofollow">Page source</a>
     </div>
 

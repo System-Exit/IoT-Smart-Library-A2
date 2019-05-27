@@ -1,7 +1,7 @@
-## Acknowledgement
-## This code is adapted from:
-## https://www.pyimagesearch.com/2018/05/21/an-opencv-barcode-and-qr-code-scanner-with-zbar/
-## and Matthew Bolger (PIoT S1 2019)
+# Acknowledgement
+# This code is adapted from:
+# https://www.pyimagesearch.com/2018/05/21/an-opencv-barcode-and-qr-code-scanner-with-zbar/
+# and Matthew Bolger (PIoT S1 2019)
 
 from imutils.video import VideoStream
 from pyzbar import pyzbar
@@ -16,6 +16,7 @@ import google_api
 import os
 import sys
 >>>>>>> development
+
 
 class QRScanner:
     """
@@ -37,8 +38,15 @@ class QRScanner:
         self.__gdb = google_api.GoogleDatabaseAPI()
 
     def read_barcode(self):
+        """
+        Reads a barcode from videostream and returns barcode data
+
+        Returns:
+            Barcode data.
+
+        """
         print("[INFO] starting video stream...")
-        vs = VideoStream( src = -1 ).start()
+        vs = VideoStream(src=-1).start()
         time.sleep(2.0)
 
         found = set()
@@ -47,7 +55,7 @@ class QRScanner:
         # grab the frame from the threaded video stream and resize it to
         # have a maximum width of 400 pixels
         frame = vs.read()
-        frame = imutils.resize(frame, width = 400)
+        frame = imutils.resize(frame, width=400)
 
         # find the barcodes in the frame and decode each of the barcodes
         barcodes = pyzbar.decode(frame)
@@ -58,10 +66,12 @@ class QRScanner:
             barcodeData = barcode.data.decode("utf-8")
             barcodeType = barcode.type
 
-            # if the barcode text has not been seen before print it and update the set
+            # if the barcode text has not been seen before
+            # print it and update the set
             if barcodeData not in found:
-                print("[FOUND] Type: {}, Data: {}".format(barcodeType, barcodeData))
-                found.add(barcodeData)          
+                print("[FOUND] Type: {}, Data: {}".format(barcodeType,
+                                                          barcodeData))
+                found.add(barcodeData)
 
         # Stop the video stream
         print("[INFO] closing video stream...")
@@ -77,7 +87,10 @@ class QRScanner:
         """
         Asks user to specify a property and property value, which
         is then used in a search of all books in the database and
-        the result is formatted and displayed to the user
+        the result is formatted and displayed to the user.
+
+        Args:
+            string (str): String to search by.
 
         """
         # Initialize clause for search
@@ -144,18 +157,22 @@ class QRScanner:
                                           str(book[2]).ljust(author_width),
                                           str(book[3]).center(pub_date_width),
                                           str(book[4]).center(isbn_width)))
-        
+
         else:
             print("No books were found with this filter.")
         # Wait for user to press enter before returning to menu
         input("Press enter to return to menu.")
 >>>>>>> development
 
-
     def __init_video_stream(self):
+        """
+        Initializes and returns video stream object.
+
+        Returns:
+            Newley initialized videostream object.
+
+        """
         print("[INFO] starting video stream...")
-        vs = VideoStream( src = -1 ).start()
+        vs = VideoStream(src=-1).start()
         time.sleep(2.0)
         return vs
-    
-    

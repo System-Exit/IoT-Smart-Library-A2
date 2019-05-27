@@ -107,8 +107,10 @@ class FacialRecognition:
     def register_user(self, username):
         """
         Registers a user in the facial recognition database.
-        First captures 10 images from user and writes them to file.
+        First captures 10 images from user and writes them to file,
         Then encodes the images and stores encoding in a pickle file.
+        This does require the user to press enter for each image taken,
+        and takes 10 images before calling encoding method and finishing.
 
         Args:
             username (str): The username of the user that will be registered.
@@ -156,6 +158,7 @@ class FacialRecognition:
     def encode_images(self):
         """
         Encodes all existing images to a pickle file.
+        This pickle file is used for facial recognition.
         Name of encoding file is defined on initialization.
 
         """
@@ -200,4 +203,3 @@ class FacialRecognition:
         camera.set(4, 480)
         # Return camera object
         return camera
-

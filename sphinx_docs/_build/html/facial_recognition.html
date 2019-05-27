@@ -1,33 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>facial_recognition module &#8212; PIoT Library 0.1 documentation</title>
+    
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PIoT Library 0.1 documentation" href="contents.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head><body>
+  </head>
+  <body role="document">
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="module-facial_recognition">
@@ -35,12 +45,14 @@
 <dl class="class">
 <dt id="facial_recognition.FacialRecognition">
 <em class="property">class </em><code class="descclassname">facial_recognition.</code><code class="descname">FacialRecognition</code><span class="sig-paren">(</span><em>data_dir='facial_data'</em>, <em>encodings_path='encodings.pickle'</em>, <em>detect_model='hog'</em><span class="sig-paren">)</span><a class="headerlink" href="#facial_recognition.FacialRecognition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Class for handling facial recognition functionality.</p>
 <dl class="method">
 <dt id="facial_recognition.FacialRecognition.encode_images">
 <code class="descname">encode_images</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#facial_recognition.FacialRecognition.encode_images" title="Permalink to this definition">¶</a></dt>
-<dd><p>Encodes all existing images to a pickle file.</p>
+<dd><p>Encodes all existing images to a pickle file.
+This pickle file is used for facial recognition.
+Name of encoding file is defined on initialization.</p>
 </dd></dl>
 
 <dl class="method">
@@ -48,10 +60,10 @@
 <code class="descname">recognize_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#facial_recognition.FacialRecognition.recognize_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recognizes an individual with a webcam and returns their username.
 Requires that a user has registered with facial recognition.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>If user is recognized, returns their username.
-If user is recognized as unknown too many times, returns None.</p>
-</dd>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>If user is recognized, returns their username as a string.
+If user is recognized as unknown too many times, returns None.</dd>
 </dl>
 </dd></dl>
 
@@ -59,11 +71,13 @@ If user is recognized as unknown too many times, returns None.</p>
 <dt id="facial_recognition.FacialRecognition.register_user">
 <code class="descname">register_user</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#facial_recognition.FacialRecognition.register_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Registers a user in the facial recognition database.
-First captures 10 images from user and writes them to file.
-Then encodes the images and stores encoding in a pickle file.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>username (str): The username of the user that will be registered.</p>
-</dd>
+First captures 10 images from user and writes them to file,
+Then encodes the images and stores encoding in a pickle file.
+This does require the user to press enter for each image taken,
+and takes 10 images before calling encoding method and finishing.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>username (str): The username of the user that will be registered.</dd>
 </dl>
 </dd></dl>
 
@@ -73,47 +87,33 @@ Then encodes the images and stores encoding in a pickle file.</p>
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">PIoT Library</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-
-<div class="relations">
+        <div class="sphinxsidebarwrapper"><div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="contents.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/facial_recognition.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
-    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
@@ -122,11 +122,11 @@ Then encodes the images and stores encoding in a pickle file.</p>
       &copy;2019, Daniel Linford, James Laine-wyllie, Yianna Paris, Tom Plowman.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
-      <a href="_sources/facial_recognition.rst.txt"
+      <a href="_sources/facial_recognition.txt"
           rel="nofollow">Page source</a>
     </div>
 

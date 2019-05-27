@@ -2,6 +2,10 @@ import sqlite3
 
 
 class LocalDatabase:
+    """
+    Class for handling local database operations.
+
+    """
     def __init__(self, name):
         self.name = name
 
@@ -12,15 +16,15 @@ class LocalDatabase:
         after verifying that 'username' and 'email' are unique.
 
         Args:
-            first_name (str): First name of user
-            last_name (str): Last name of user
-            email (str): Email of user
-            username (str): Username of user
-            password (str): Hashed password of user
+            first_name (str): First name of user.
+            last_name (str): Last name of user.
+            email (str): Email of user.
+            username (str): Username of user.
+            password (str): Hashed password of user.
 
         Returns:
-            1 if user with username already exists
-            2 id user with email already exists
+            int: 1 if user with username already exists.
+                 2 id user with email already exists.
 
         """
         connection = sqlite3.connect(self.name)
@@ -64,7 +68,15 @@ class LocalDatabase:
 
     def verify_login(self, username, password):
         """
-        Returns the user if the entered username and password is a match
+        Returns the user if the entered username and password is a match.
+
+        Args:
+            username (str): User to verify password of.
+            password (str): Hashed password to verify.
+
+        Returns:
+            Dictionary object of all specified user data from database if
+            successfully verified, false if not.
 
         """
         connection = sqlite3.connect(self.name)
@@ -95,10 +107,10 @@ class LocalDatabase:
         usrename, firstname, lastname, and email
 
         Args:
-            username (str): Username of the user to get data of
+            username (str): Username of the user to get data of.
 
         Returns:
-            Dictionary object of all specified user data from database
+            Dictionary object of all specified user data from database.
 
         """
         connection = sqlite3.connect(self.name)
@@ -126,10 +138,10 @@ class LocalDatabase:
         Check if user exists in database or not.
 
         Args:
-            username (str): Username of user to check for
+            username (str): Username of user to check for.
 
         Retruns:
-            True if user exists, False if user does not exist
+            True if user exists, False if user does not exist.
 
         """
         connection = sqlite3.connect(self.name)
