@@ -41,9 +41,9 @@ While the virtual environment is activated:
     * The server can be shutdown via ctrl-c
 
 In order to deactivate the virtual environment:
-
-    * $ deactivate
-
+```bash
+$ deactivate
+```
 
 ## Object Detection for QR Codes
 
