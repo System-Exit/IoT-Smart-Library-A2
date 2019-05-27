@@ -1,7 +1,8 @@
-t<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Admin App</title>    
+    <title>Admin App</title>
+    <strong><link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"></strong>
   </head>
   <body>
    
@@ -9,6 +10,12 @@ t<!DOCTYPE html>
       <div class="container">
         <h1 class="logo">Admin App</h1>
       </div>
+      <strong><nav>
+        <ul class="menu">
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('books') }}">Books</a></li>
+        </ul>
+      </nav></strong>
     </header> 
      
     <div class="container">

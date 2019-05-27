@@ -1,6 +1,9 @@
 from flask import render_template
 from app import app
 from app.forms import LoginForm
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy(app)
 
 #Contains all the routes for the application split into methods
 
@@ -18,6 +21,13 @@ def login():
 
     return render_template('login.html', title='Sign in', form=form, error=error)
 
+@app.route('/books')
+def books():
+    
+    books = None
+    books = Book.query.all()
+
+    return render_template("books.html", books = books)
 # Any other routes go here
 
 # Example
