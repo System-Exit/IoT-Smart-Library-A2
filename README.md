@@ -84,10 +84,10 @@ Ensure you run through the test recording and playback.
 To get Voice Recognition to work in our Smart Library, the following packages need to be installed:
 
 ```bash
-pip3 install SpeechRecognition
-sudo apt-get install portaudio10-dev python-all-dev python3-all-dev
-pip3 install pyaudio
-pip3 install google-api-python-client
-sudo apt-get install flac
+$ pip3 install SpeechRecognition
+$ sudo apt-get install portaudio10-dev python-all-dev python3-all-dev
+$ pip3 install pyaudio
+$ pip3 install google-api-python-client
+$ sudo apt-get install flac
 ```
 
