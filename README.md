@@ -9,6 +9,46 @@
 | Daniel Linford | `s3661720` |
 
 ---
+## Overview
+### About this project
+
+*This project has been designed for use with two Raspberry Pi Model B+'s (a reception pi and a master pi) and a webcam (project uses Microsoft® LifeCam HD-3000).*
+
+This prototype is designed to automate a Library Management System (LMS) for two types of users: **library user** and **library admin**. 
+
+#### Library User Features
+* Register with the library, via text
+* Registered users can register for face recognition
+* Log into the LMS, via text or face recognition
+* Search, Borrow and Return a book
+
+#### Library Admin Features
+* Flask web application
+* Add or remove books
+* Generate visual reports
+
+The project also uses OpenCV for facial recognition and object detection, and a cloud-based database using Google Cloud Platform (GCP), which both need to be installed on the Master Pi. These are lengthy processes, so please allow some time for setup.
+
+
+## Facial Recognition
+
+Facial reognition required 3 stages: building the image dataset, encoding the images in the dataset and recognition of new images.
+
+Once users are registered, they can opt to register for facial recognition. The user needs to press enter on the keyboard to take photos, and the system will notify them if an image has been captured or if no face has been detected.
+
+*It is recommended that a dataset of 30 photos with natural and unnatural facial expressions are recorded before encoding.*
+
+
+## Main Console (Reception Pi)
+
+The main console runs on the first Raspberry Pi and is a command line interface (CLI), which acts as the initial entry for the LMS. User details are stored and passwords are encrypted in a local database. Once a user logs into the system, the Master Pi (LMS) is sent the user's username via sockets. Unsuccessful login attempt does not allow the user past this system.
+
+
+## Master Console (Master Pi)
+
+Once the Master Pi receives confirmation via sockets, the LMS displays a CLI. Main functionality of the LMS is displayed here, including searching for a book via voice or QR code.
+
+
 ## Webapp
 
 In order to run the web app locally, several dependendencies are required:
