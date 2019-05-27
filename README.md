@@ -41,7 +41,7 @@ Once users are registered, they can opt to register for facial recognition. The 
 
 ## Main Console (Reception Pi)
 
-The main console runs on the first Raspberry Pi and is a command line interface (CLI), which acts as the initial entry for the LMS. User details are stored and passwords are encrypted in a local database. Once a user logs into the system, the Master Pi (LMS) is sent the user's username via sockets. Unsuccessful login attempt does not allow the user past this system.
+The main console runs on the first Raspberry Pi and is a command line interface (CLI), which acts as the initial entry for the LMS. User details are stored and passwords are encrypted in a local database. Once a user logs into the system, the Master Pi (LMS) is sent the user's username via sockets. Unsuccessful login attempt does not allow the user passed this system.
 
 
 ## Master Console (Master Pi)
