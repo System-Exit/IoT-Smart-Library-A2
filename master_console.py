@@ -92,8 +92,8 @@ class MasterConsole:
             print("{0: <25}".format("Search for a book"), "1")
             print("{0: <25}".format("Borrow a book"), "2")
             print("{0: <25}".format("Return a book"), "3")
-            print("{0: <25}".format("Search by voice"), "4")
-            print("{0: <25}".format("Search by QR code"), "5")
+            print("{0: <25}".format("Search book by voice"), "4")
+            print("{0: <25}".format("Search book by QR code"), "5")
             print("{0: <25}".format("Logout"), "0")
 
             # Get option from user
@@ -115,7 +115,7 @@ class MasterConsole:
                 elif opt == "4":
                     # print("Sorry, this isn't working right now.")
                     # opt = None
-                    recoqnizer.search_books()
+                    recognizer.search_books()
                 elif opt == "5":
                     # just call search books from qr function here
                     # get it working
