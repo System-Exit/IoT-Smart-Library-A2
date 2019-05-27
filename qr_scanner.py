@@ -10,12 +10,8 @@ import datetime
 import imutils
 import time
 import cv2
-<<<<<<< HEAD
-import google_api
-=======
 import os
 import sys
->>>>>>> development
 
 
 class QRScanner:
@@ -31,10 +27,7 @@ class QRScanner:
         Should accept arg for path or link for QR codes.
 
         """
-<<<<<<< HEAD
-=======
         # Load google database API
->>>>>>> development
         self.__gdb = google_api.GoogleDatabaseAPI()
 
     def read_barcode(self):
@@ -79,11 +72,7 @@ class QRScanner:
         print(barcodeData)
         return barcodeData
 
-<<<<<<< HEAD
-    def search_books(self):
-=======
     def search_books(self, string):
->>>>>>> development
         """
         Asks user to specify a property and property value, which
         is then used in a search of all books in the database and
@@ -99,11 +88,7 @@ class QRScanner:
         # Get option from user
 
         # Have user enter book ID to search by
-<<<<<<< HEAD
-        book_id = self.read_barcode()
-=======
         book_id = string
->>>>>>> development
         clause += "BookID = %s"
         values = [book_id]
 
@@ -113,28 +98,6 @@ class QRScanner:
         if results:
             # Build formatting rules
             id_width = max(max(len(str(x[0])) for x in results),
-<<<<<<< HEAD
-                        len("ID"))
-            title_width = max(max(len(str(x[1])) for x in results),
-                            len("Title"))
-            author_width = max(max(len(str(x[2])) for x in results),
-                            len("Author"))
-            pub_date_width = len("Publish Date")
-            total_width = id_width+title_width+author_width+pub_date_width+3
-            # Display all options on screen
-            print("%s|%s|%s|%s" % ("ID".center(id_width),
-                                "Title".center(title_width),
-                                "Author".center(author_width),
-                                "Publish Date".center(pub_date_width)))
-            print('-'*total_width)
-            for book in results:
-                print("%s|%s|%s|%s" % (str(book[0]).rjust(id_width),
-                                    str(book[1]).ljust(title_width),
-                                    str(book[2]).ljust(author_width),
-                                    str(book[3]).center(pub_date_width)))
-        else:
-            print("No books were found with this filter.")
-=======
                            len("ID"))
             title_width = max(max(len(str(x[1])) for x in results),
                               len("Title"))
@@ -162,7 +125,6 @@ class QRScanner:
             print("No books were found with this filter.")
         # Wait for user to press enter before returning to menu
         input("Press enter to return to menu.")
->>>>>>> development
 
     def __init_video_stream(self):
         """
