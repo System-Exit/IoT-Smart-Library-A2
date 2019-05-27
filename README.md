@@ -36,7 +36,7 @@ Facial reognition required 3 stages: building the image dataset, encoding the im
 
 Once users are registered, they can opt to register for facial recognition. The user needs to press enter on the keyboard to take photos, and the system will notify them if an image has been captured or if no face has been detected.
 
-*It is recommended that a dataset of 30 photos with natural and unnatural facial expressions are recorded before encoding.*
+*It is recommended that a dataset of at least 30 photos with natural and unnatural facial expressions are recorded before encoding.*
 
 
 ## Main Console (Reception Pi)
