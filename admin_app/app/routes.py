@@ -17,3 +17,13 @@ def login():
             error = "Invalid username or password"
 
     return render_template('login.html', title='Sign in', form=form, error=error)
+
+# Any other routes go here
+
+# Example
+# @app.route(/edit, methods=['GET', 'POST'])
+# def edit()
+# .
+# .
+# .
+# return reder_template("<>.html", variables = variables)
