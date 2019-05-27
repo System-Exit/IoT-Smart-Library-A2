@@ -6,6 +6,7 @@ import os
 import sys
 from socket_utils import SocketUtils
 from qr_scanner import QRScanner
+from voice_ui import VoiceRecognition
 
 
 class MasterConsole:
@@ -83,6 +84,7 @@ class MasterConsole:
         """
         while True:
             qr = QRScanner()
+            recognizer = VoiceRecognition()
             # Welcome user and display menu
             os.system('cls' if os.name is 'nt' else 'clear')
             print(("Welcome %s!" % first_name).center(26, ' '))
@@ -90,8 +92,8 @@ class MasterConsole:
             print("{0: <25}".format("Search for a book"), "1")
             print("{0: <25}".format("Borrow a book"), "2")
             print("{0: <25}".format("Return a book"), "3")
-            print("{0: <25}".format("Search by voice"), "4")
-            print("{0: <25}".format("Search by QR code"), "5")
+            print("{0: <25}".format("Search book by voice"), "4")
+            print("{0: <25}".format("Search book by QR code"), "5")
             print("{0: <25}".format("Logout"), "0")
 
             # Get option from user
@@ -99,6 +101,7 @@ class MasterConsole:
             while opt is None:
                 opt = input("Select an option: ")
                 # Handle option from user
+                # TODO put in different search functionality and options here
                 if opt == "1":
                     # Let user search for a book
                     self.search_books(opt, True, False, False)
@@ -110,9 +113,9 @@ class MasterConsole:
                     self.return_books()
                 # Voice UI
                 elif opt == "4":
-                    print("Sorry, this isn't working right now.")
-                    opt = None
-                    # recoqnizer.search_books()
+                    # print("Sorry, this isn't working right now.")
+                    # opt = None
+                    recognizer.search_books()
                 elif opt == "5":
                     # just call search books from qr function here
                     # get it working
@@ -204,6 +207,7 @@ class MasterConsole:
                 opt = None
 
         # Query the books database for all books that satisfy conditions
+        print("Search the GDB")
         results = self.__gdb.search_books(clause, values)
         if results:
             # Build formatting rules
