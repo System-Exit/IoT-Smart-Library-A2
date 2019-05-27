@@ -67,6 +67,8 @@ An extra option is present to allow a user to return a book by scanning the QR c
 
 ## Voice Recognition
 
+**This feature has stopped working, and is still being debugged.**
+
 Voice Recognition for the smart library is used to search for books either by title or author. The project uses Google Speech-to-text with the default API for testing purposes. Rather than constantly streaming for voice input, the voice is invoked when needed (such as searching for a book by title or authoer), where the microphone will power on. The microphone adjusts for ambient noise, so it's important to give it a short second to adjust the threshold, before speaking into the microphone.
 
 Google Speech Recognition will convert your speech to text, which will appear as a message on screen before automatically searching the the library's Google Database for a matchin result.
@@ -76,3 +78,16 @@ As we are using the Raspberry Pi for this prototype, we will need advanced acces
 The following website has been used to help set up the `.asroundrc` file which should be placed in `/home/pi`:
 
 [https://developers.google.com/assistant/sdk/guides/service/python/embed/audio](https://developers.google.com/assistant/sdk/guides/service/python/embed/audio)
+
+Ensure you run through the test recording and playback.
+
+To get Voice Recognition to work in our Smart Library, the following packages need to be installed:
+
+```bash
+pip3 install SpeechRecognition
+sudo apt-get install portaudio10-dev python-all-dev python3-all-dev
+pip3 install pyaudio
+pip3 install google-api-python-client
+sudo apt-get install flac
+```
+
