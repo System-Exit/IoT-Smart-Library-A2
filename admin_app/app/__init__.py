@@ -1,6 +1,7 @@
-from flask import Flask, Blueprint, request, jsonify, render_template
+from flask import Flask, Blueprint, request, jsonify, render_template, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from app.forms import LoginForm
 import os, requests, json
 from config import Config
 
@@ -15,7 +16,11 @@ from app import routes
 @app.route("/")
 def home():
     
-    #response = requests.get("http://127.0.0.1:5000/")
-    # data = json.loads(response.text)
-
+  #  if not session.get('logged_in'):
+  #    return render_template("login.html")
+  #  else:
+  #    return render_template("home.html")
+    
     return render_template("home.html")
+
+  

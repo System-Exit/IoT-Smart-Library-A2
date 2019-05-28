@@ -1,5 +1,6 @@
-<html>
-  <body>
+{% extends "layout.html" %}
+{% block content %}
+  
     <h1>Add book</h1>
     <form method="POST" action="/">
       <input type="text" name="title">
@@ -30,4 +31,4 @@
         {% endfor %}
     </table>
   </body>
-</html>
+{% endblock %}

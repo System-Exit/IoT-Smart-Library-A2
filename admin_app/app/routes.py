@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, session, abort
 from app import app
 from app.forms import LoginForm
 from flask_sqlalchemy import SQLAlchemy
@@ -15,6 +15,7 @@ def login():
     if form.validate_on_submit():
         
         if(request.form['username'] == "jaqen" and request.form['password'] == "hghar"):
+            session['logged_in'] = True
             return redirect(url_for('home'))
         else:
             error = "Invalid username or password"
@@ -28,3 +29,10 @@ def books():
     books = Book.query.all()
 
     return render_template("books.html", books = books)
+
+@app.route('/edit')
+def edit():
+    books = None
+    books = Book.query.all()
+
+    return render_template("edit.html", books = books)
