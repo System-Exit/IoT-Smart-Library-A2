@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, url_for
 from app import app
 from app.forms import LoginForm
 from flask_sqlalchemy import SQLAlchemy
@@ -15,7 +15,7 @@ def login():
     if form.validate_on_submit():
         
         if(request.form['username'] == "jaqen" and request.form['password'] == "hghar"):
-            return redirect('/index')
+            return redirect(url_for('home'))
         else:
             error = "Invalid username or password"
 
