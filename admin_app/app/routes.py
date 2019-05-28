@@ -1,8 +1,8 @@
-from flask import render_template
+from flask import render_template, redirect, request
 from app import app
 from app.forms import LoginForm
 from flask_sqlalchemy import SQLAlchemy
-
+#from app import site
 db = SQLAlchemy(app)
 
 #Contains all the routes for the application split into methods
@@ -28,12 +28,3 @@ def books():
     books = Book.query.all()
 
     return render_template("books.html", books = books)
-# Any other routes go here
-
-# Example
-# @app.route(/edit, methods=['GET', 'POST'])
-# def edit()
-# .
-# .
-# .
-# return reder_template("<>.html", variables = variables)

@@ -4,15 +4,15 @@ from flask_marshmallow import Marshmallow
 import os, requests, json
 from config import Config
 
-site = Blueprint("site", __name__)
+#site = Blueprint("site", __name__, template_folder='templates', static_folder='static')
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 from app import routes
-# Client webpage. # Landing Page of website
 
-@site.route("/")
+
+@app.route("/")
 def home():
     
     #response = requests.get("http://127.0.0.1:5000/")

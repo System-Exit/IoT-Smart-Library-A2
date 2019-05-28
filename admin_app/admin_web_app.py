@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
 from app.flask_api import api, db
-from app import site
+#from app import site
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -22,7 +22,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 db.init_app(app)
 
 app.register_blueprint(api)
-app.register_blueprint(site)
+#app.register_blueprint(site)
 
 if __name__ == "__main__":
     app.run(host = "0.0.0.0")
