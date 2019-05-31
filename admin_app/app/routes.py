@@ -1,6 +1,6 @@
 from flask import render_template, redirect, request, url_for, session, abort
 from app import app
-from app.forms import LoginForm
+from app.forms import LoginForm, EditBookForm
 from flask_sqlalchemy import SQLAlchemy
 #from app import site
 db = SQLAlchemy(app)
@@ -36,6 +36,7 @@ def books():
 
 @app.route('/edit', methods=["GET", "POST"])
 def edit():
+    form = EditBookForm()
     books = None
 
     try:
@@ -44,4 +45,4 @@ def edit():
             print("Failed to get books")
             print(e)
 
-    return render_template("edit.html", books = books)
+    return render_template("edit.html", books = books, form=form)

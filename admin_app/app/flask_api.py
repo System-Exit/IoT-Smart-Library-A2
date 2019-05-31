@@ -50,7 +50,7 @@ def getBooks():
 # Endpoint to get book by id.
 @api.route("/book/<id>", methods = ["GET"])
 def getBook(id):
-    person = Book.query.get(id)
+    book = Book.query.get(id)
 
     return bookSchema.jsonify(person)
 
