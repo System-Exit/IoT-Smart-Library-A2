@@ -34,7 +34,7 @@ def books():
     
     return render_template("books.html", books = books)
 
-@app.route('/edit')
+@app.route('/edit', methods=["GET", "POST"])
 def edit():
     books = None
 
