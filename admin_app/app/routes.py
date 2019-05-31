@@ -26,13 +26,22 @@ def login():
 def books():
     
     books = None
-    books = Book.query.all()
-
+    try:
+        books = Book.query.all()
+    except Exception as e:
+            print("Failed to get books")
+            print(e)
+    
     return render_template("books.html", books = books)
 
 @app.route('/edit')
 def edit():
     books = None
-    books = Book.query.all()
+
+    try:
+        books = Book.query.all()
+    except Exception as e:
+            print("Failed to get books")
+            print(e)
 
     return render_template("edit.html", books = books)

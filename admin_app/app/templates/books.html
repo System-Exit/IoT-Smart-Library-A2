@@ -1,11 +1,15 @@
 {% extends "layout.html" %}
   
 {% block content %}
-<h1>Books</h1>
+<h1>Books</h1> 
+
+{% if books!=none%}
 <table>
   {% for book in books %}
     <tr>
       <td>
         {{book.title}} 
       </td>
+{% endif%}
+
 {% endblock %}
