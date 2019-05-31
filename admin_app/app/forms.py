@@ -12,6 +12,6 @@ class LoginForm(FlaskForm):
 
 class EditBookForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    Author = StringField('Author', validators=[DataRequired()])
-    PublishedDate = DateField('Published Date', validators=[DataRequired()])
+    author = StringField('Author', validators=[DataRequired()])
+    publishedDate = DateField('Published Date', validators=[DataRequired()])
     ISBN = StringField('ISBN', validators=[DataRequired()])
