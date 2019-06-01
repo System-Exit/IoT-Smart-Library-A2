@@ -5,8 +5,11 @@ import os, requests, json
 from app.flask_api import api, db
 #from app import site
 
+
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
+db = SQLAlchemy()
+
 
 # Update HOST and PASSWORD appropriately.
 HOST = '35.244.115.76'
@@ -19,11 +22,12 @@ DATABASE = 'Library'
 
 INSTANCE_NAME = 'coral-silicon-242307:australia-southeast1:masterpi'
 
-
+#{host}
+# {host}
 SQLALCHEMY_DATABASE_URI = (
-    'mysql+pymysql://{user}:{password}@{host}/{database}'
+    'mysql+pymysql://{user}:{password}@/{database}'
     '?unix_socket=/cloudsql/{instance_name}').format(
-        user=USER, password=PASSWORD, host = HOST, 
+        user=USER, password=PASSWORD, 
         database=DATABASE, instance_name=INSTANCE_NAME
     )
 
@@ -32,7 +36,7 @@ SQLALCHEMY_DATABASE_URI = (
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+
 db.init_app(app)
 
 app.register_blueprint(api)
