@@ -16,7 +16,7 @@ def create_app(app):
     DATABASE = 'Library'
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}/{}'.format(USER, PASSWORD, HOST, DATABASE)
-    app.config.setdefault['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config.setdefault('SQLALCHEMY_TRACK_MODIFICATIONS', False) 
     
     db.init_app(app)
     ma.init_app(app)

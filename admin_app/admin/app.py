@@ -5,8 +5,8 @@ import os, requests, json
 import sqlalchemy, pymysql
 from admin.database import create_app
 from admin.flask_api import api
-import admin.routes
-from config import Config
+#import admin.routes
+from admin.config import Config
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
