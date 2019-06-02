@@ -9,7 +9,7 @@ api = Blueprint("api", __name__)
 
 app = Flask(__name__)
 
-db = SQLAlchemy(app)
+
 ma = Marshmallow()
 
 #Change all these API calls to reflect our book table

@@ -9,7 +9,7 @@ from app.flask_api import api, db
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-
+db = SQLAlchemy()
 
 # Update HOST and PASSWORD appropriately.
 HOST = '35.244.115.76'
@@ -38,7 +38,7 @@ print(SQLALCHEMY_DATABASE_URI)
 # database_path = "mysql+pymysql://{}:{}@/{}?unix_socket=/cloudsql/{}".format(USER, PASSWORD, DATABASE, INSTANCE_NAME)
 # 'mysql+pymysql://root:root@35.244.115.76/Library?unix_socket=/cloudsql/coral-silicon-242307:australia-southeast1:masterpi'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}/{}'.format(USER, PASSWORD, HOST, DATABASE)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -53,6 +53,32 @@ app.register_blueprint(api)
 # PASSWORD = "ipretsam"
 # DATABASE = "Library"
 # database_path = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
+
+
+class Book(db.Model):
+    __tablename__ = "Book"
+    BookID = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    Title = db.Column(db.Text, nullable = False)
+    Author = db.Column(db.Text, nullable = False)
+    PublisherDate = db.Column(db.Date, nullable = False)    
+    # field for isbn
+    def __init__(self, BookID, Title, Author, PublisherDate):
+        self.BookID = BookID
+        self.Title = Title
+        self.Author = Author
+        self.PublisherDate = PublisherDate
+
+#class BookSchema(ma.Schema):
+#    # Reference: https://github.com/marshmallow-code/marshmallow/issues/377#issuecomment-261628415
+#    def __init__(self, strict = True, **kwargs):
+#        super().__init__(strict = strict, **kwargs)
+#    
+#    class Meta:
+#        # Fields to expose.
+#        fields = ("BookID", "Title", "Author", "PubisherDate")
+
+#bookSchema = BookSchema()
+#bookSchema = BookSchema(many = True)
 
 if __name__ == "__main__":
     app.run(host = "0.0.0.0")
