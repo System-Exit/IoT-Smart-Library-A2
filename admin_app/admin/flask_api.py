@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import sqlalchemy, pymysql
 import os, requests, json
-from admin.database import Book
+from admin.database import Book, bookSchema, db
 #from flask import current_app as app
 
 api = Blueprint("api", __name__) 

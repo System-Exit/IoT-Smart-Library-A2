@@ -19,13 +19,6 @@ create_app(app)
 app.register_blueprint(api)
 #app.register_blueprint(site)
 
-# Database information for Daniels Cloud SQL
-# HOST = "35.244.106.216"
-# USER = "masterpi"
-# PASSWORD = "ipretsam"
-# DATABASE = "Library"
-# database_path = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
-
 #from flask import Flask, Blueprint, request, jsonify, render_template, session, abort
 #from flask_sqlalchemy import SQLAlchemy
 #from flask_marshmallow import Marshmallow
@@ -115,6 +108,6 @@ def bookDelete(id):
         return bookSchema.jsonify(book)
     except:
         print("error")
-            
+
 if __name__ == "__main__":
     app.run(host = "0.0.0.0")
