@@ -37,14 +37,14 @@ app.register_blueprint(api)
 
 
 @app.route('/', methods=['GET', 'POST'])
-def login():
+def index():
     form = LoginForm()
     error = None
 
     if form.validate_on_submit():
         
         if(request.form['username'] == "jaqen" and request.form['password'] == "hghar"):
-            return redirect(url_for('index'))
+            return render_template('index.html')
         else:
             error = "Invalid username or password"
 
