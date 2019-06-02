@@ -1,6 +1,5 @@
 from flask import render_template, redirect, request, url_for, session, abort
-from app import app
-from app.forms import LoginForm, EditBookForm
+from admin.forms import LoginForm, EditBookForm
 from flask_sqlalchemy import SQLAlchemy
 #from app import site
 # db = SQLAlchemy(app)
