@@ -113,6 +113,8 @@ def bookDelete(id):
         db.session.commit()
 
         return bookSchema.jsonify(book)
-
+    except:
+        print("error")
+            
 if __name__ == "__main__":
     app.run(host = "0.0.0.0")
