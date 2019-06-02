@@ -31,7 +31,7 @@ SQLALCHEMY_DATABASE_URI = (
         database=DATABASE, instance_name=INSTANCE_NAME
     )
 
-print()
+print(SQLALCHEMY_DATABASE_URI)
 
 
 

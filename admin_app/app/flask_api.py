@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+import sqlalchemy, pymysql
 import os, requests, json
 from flask import current_app as app
 
