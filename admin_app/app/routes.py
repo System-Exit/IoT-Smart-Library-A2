@@ -3,7 +3,7 @@ from app import app
 from app.forms import LoginForm, EditBookForm
 from flask_sqlalchemy import SQLAlchemy
 #from app import site
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
 #Contains all the routes for the application split into methods
 
