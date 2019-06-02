@@ -1,2 +1,4 @@
 # Virtual environment on pi not required by others
 venv
+
+__pycache__
