@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, request, jsonify, render_template, session, abort
-from flask_sqlalchemy import SQLAlchemy, 
+from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from app.forms import LoginForm
 import os, requests, json
