@@ -6,6 +6,7 @@ import sqlalchemy, pymysql
 from admin.database import create_app
 from admin.flask_api import api
 import admin.routes
+from config import Config
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -34,7 +35,6 @@ app.register_blueprint(api)
 #site = Blueprint("site", __name__, template_folder='templates', static_folder='static')
 
 
-print("HI")
 
 @app.route("/")
 def index():
