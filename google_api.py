@@ -1,14 +1,23 @@
+# Acknowledgement:
+# The code for this class is adapted from facial recognition
+# code from the week 7 tutorial by Mathew Bolger
 import MySQLdb
 import json
 import datetime
+import os
+import sys
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 
+GDB_CONFIG_FILE_NAME = "gdb_config.json"
+GC_CRED_FILE_NAME = "gc_credentials.json"
+GC_TOKEN_FILE_NAME = "gc_token.json"
+
 
 class GoogleDatabaseAPI:
     """"
-    Class for handling API calls to the Google cloud database
+    Class for handling API calls to the Google cloud database.
 
     """
     def __init__(self):
@@ -18,25 +27,29 @@ class GoogleDatabaseAPI:
 
         """
         # Load config file to get database details
-        with open("gdb_config.json", "r") as jsonFile:
-            config = json.load(jsonFile)
-            host = config["host"]
-            user = config["user"]
-            password = config["password"]
-            database = config["database"]
+        if os.path.isfile(GDB_CONFIG_FILE_NAME):
+            with open(GDB_CONFIG_FILE_NAME, "r") as jsonFile:
+                config = json.load(jsonFile)
+                host = config["host"]
+                user = config["user"]
+                password = config["password"]
+                database = config["database"]
+        else:
+            print("'%s' is required for accessing google database.")
+            sys.exit(1)
 
         # Create connection to database
         self.__connection = MySQLdb.connect(host, user, password, database)
 
     def get_userID_by_username(self, username):
         """
-        Queries the database for a user by the given name and gets their ID
+        Queries the database for a user by the given name and gets their ID.
 
         Args:
-            username (str): Username of the user to get ID of
+            username (str): Username of the user to get ID of.
 
         Returns:
-            The ID of the given user if they exits, None otherwise.
+            str: The ID of the given user if they exits, None otherwise.
 
         """
         # Define insert statement
@@ -50,19 +63,19 @@ class GoogleDatabaseAPI:
         if result is None:
             return None
         else:
-            return result[0]
+            return str(result[0])
 
     def add_user(self, username, first_name, last_name):
         """
-        Adds a new user to the database with given username and name
+        Adds a new user to the database with given username and name.
 
         Args:
-            username (str): Username of the user
-            first_name (str): First name of the user
-            last_name (str): Last name of the user
+            username (str): Username of the user.
+            first_name (str): First name of the user.
+            last_name (str): Last name of the user.
 
         Returns:
-            The ID of the newly added user
+            str: The ID of the newly added user.
 
         """
         # Define query
@@ -75,7 +88,7 @@ class GoogleDatabaseAPI:
         # Commit changes
         self.__connection.commit()
         # Return the ID of the new user
-        return userID
+        return str(userID)
 
     def search_books(self, clause=None, parameters=None):
         """
@@ -89,7 +102,7 @@ class GoogleDatabaseAPI:
                 The parameters of a parameterized query. Default is none.
 
         Returns:
-            The results of the query as a list of tuples
+            The results of the query as a list of tuples.
 
         """
         # Define query
@@ -107,14 +120,14 @@ class GoogleDatabaseAPI:
 
     def create_borrow_entry(self, bookID, userID):
         """
-        Create a borrow entry for a given book in database
+        Create a borrow entry for a given book in database.
 
         Args:
-            bookID (str): ID of the book to create borrow entry for
-            userID (str): ID of user that will be borrowing the book
+            bookID (str): ID of the book to create borrow entry for.
+            userID (str): ID of user that will be borrowing the book.
 
         Returns:
-            The generated ID for the book borrow entry
+            str: The generated ID for the book borrow entry.
 
         """
         # Define insert statement
@@ -135,7 +148,7 @@ class GoogleDatabaseAPI:
         Update a borrow entry status field to "returned"
 
         Args:
-            book_borrowed_ID (str): ID of borrow event to update
+            book_borrowed_ID (str): ID of borrow event to update.
 
         """
         # Define update statement
@@ -153,7 +166,7 @@ class GoogleDatabaseAPI:
         Queries the database to check if the book with ID exists.
 
         Args:
-            bookID (str): The ID of the book to check
+            bookID (str): The ID of the book to check.
 
         Returns:
             bool: True if book with ID exists, False otherwise.
@@ -167,7 +180,7 @@ class GoogleDatabaseAPI:
             cursor.execute(query, parameters)
             result = cursor.fetchone()
         # Return whether or not the book exists
-        if result is None or result[0] == "borrowed":
+        if result is None:
             return False
         else:
             return True
@@ -180,8 +193,8 @@ class GoogleDatabaseAPI:
             bookID (str): The ID of the book to check
 
         Returns:
-            True and BookBorrowedID if book is currently borrowed.
-            False and None if book is not currently borrowed.
+            bool: True and BookBorrowedID if book is currently borrowed.
+                  False and None if book is not currently borrowed.
 
         """
         # Define query
@@ -212,11 +225,11 @@ class GoogleCalendarAPI:
         """
         # Load token for Google calendar API
         scope = "https://www.googleapis.com/auth/calendar"
-        store = file.Storage("token.json")
+        store = file.Storage(GC_TOKEN_FILE_NAME)
         creds = store.get()
         # If token file does not exist or is invalid, run through API setup
         if not creds or creds.invalid:
-            flow = client.flow_from_clientsecrets("credentials.json", scope)
+            flow = client.flow_from_clientsecrets(GC_CRED_FILE_NAME, scope)
             creds = tools.run_flow(flow, store)
         # Builds API service
         self.__service = build("calendar", "v3", http=creds.authorize(Http()))
@@ -226,9 +239,9 @@ class GoogleCalendarAPI:
         Adds a new borrow calendar event for a borrowed book.
 
         Args:
-            book_borrow_ID (str): ID that will be inlcuded in event ID
-            bookID (str): ID of the book that is being borrowed
-            username (str): Username of the user borrowing the book
+            book_borrow_ID (str): ID that will be inlcuded in event ID.
+            bookID (str): ID of the book that is being borrowed.
+            username (str): Username of the user borrowing the book.
 
         """
         # Define return date of book seven days from now
@@ -236,11 +249,10 @@ class GoogleCalendarAPI:
         # Create event with details of borrowing including book ID and user
         summary = "Book %s borrowed" % str(bookID)
         location = "RMIT PIoT Library"
-        description = "A book with an ID number of %s has \
-                       been borrowed by %s and is due to be returned \
-                       by this date." % (str(bookID), str(username))
+        description = ("A book with an ID number of %s has "
+                       "been borrowed by %s and is due to be returned "
+                       "by this date.") % (str(bookID), str(username))
         eventID = "piotbb%s" % str(book_borrow_ID)
-        print("Borrow Event ID: %s" % eventID)
         event = {
             "id": eventID,
             "summary": summary,
@@ -262,12 +274,11 @@ class GoogleCalendarAPI:
         Removes an existing borrow calendar event for a book.
 
         Args:
-            book_borrowed_ID (str): ID of the book borrow entry in GDB
+            book_borrowed_ID (str): ID of the book borrow entry in GDB.
 
         """
         # Generate event ID of calendar event for borrowed book
-        eventID = "piotbb%s" % str(book_borrow_ID)
-        print("Borrow Event ID: %s" % eventID)
+        eventID = "piotbb%s" % str(book_borrowed_ID)
         # Delete calendar event for borrowed book
         self.__service.events().delete(calendarId="primary",
                                        eventId=eventID).execute()
