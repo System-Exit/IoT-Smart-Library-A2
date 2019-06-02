@@ -8,7 +8,6 @@ from app.flask_api import api, db
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-db = SQLAlchemy()
 
 
 # Update HOST and PASSWORD appropriately.
@@ -25,13 +24,14 @@ INSTANCE_NAME = 'coral-silicon-242307:australia-southeast1:masterpi'
 #{host}
 # {host}
 SQLALCHEMY_DATABASE_URI = (
-    'mysql+pymysql://{user}:{password}@/{database}'
+    'mysql+pymysql://{user}:{password}@{host}/{database}'
     '?unix_socket=/cloudsql/{instance_name}').format(
-        user=USER, password=PASSWORD, 
+        user=USER, password=PASSWORD, host=HOST, 
         database=DATABASE, instance_name=INSTANCE_NAME
     )
 
 # database_path = "mysql+pymysql://{}:{}@/{}?unix_socket=/cloudsql/{}".format(USER, PASSWORD, DATABASE, INSTANCE_NAME)
+# 'mysql+pymysql://root:root@35.244.115.76/Library?unix_socket=/cloudsql/coral-silicon-242307:australia-southeast1:masterpi'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
