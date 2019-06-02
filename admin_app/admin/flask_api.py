@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import sqlalchemy, pymysql
 import os, requests, json
+from admin.database import Book
 #from flask import current_app as app
 
 api = Blueprint("api", __name__) 
@@ -17,7 +18,7 @@ def getBooks():
     return jsonify(result.data)
 
 # Endpoint to get book by id.
-@api.route("/book/<id>", methods = ["GET"])
+@api.route("/book/<int:id>", methods = ["GET"])
 def getBook(id):
     book = Book.query.get(id)
 

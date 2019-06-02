@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
 import sqlalchemy, pymysql
-from admin.database import create_app
+from admin.database import create_app, Book, bookSchema, db
 from admin.flask_api import api
 #import admin.routes
 from admin.config import Config
@@ -50,7 +50,7 @@ def index():
 
     return render_template('login.html', title='Sign in', form=form, error=error)
 
-@app.route('/books')
+@app.route('/books', methods=['GET'])
 def books():
     
     books = None
@@ -62,7 +62,34 @@ def books():
     
     return render_template("books.html", books = books)
 
-@app.route('/edit', methods=["GET", "POST"])
+# Endpoint to get book by id.
+@app.route("/book/<int:id>", methods = ["GET"])
+def getBook(id):
+    book = Book.query.get(id)
+
+    return bookSchema.jsonify(book)
+
+@api.route("/book", methods = ["POST"])
+def addBook():
+
+    if request.method == 'POST' and form.vaidate():
+                
+        form = EditBookForm()
+
+        bookID = form.BookID.data
+        Title = form.Title.data
+        Author = form.Author.data
+        PublisherDate = form.PublisherDate.data
+        ISBN = form.ISBN.data
+
+        newBook = Book(BookID = bookID, Title = Title, Author = Author, PublisherDate = PublisherDate, ISBN=ISBN)
+
+        db.session.add(newBook)
+        db.session.commit()
+
+        return bookSchema.jsonify(newBook)
+
+@app.route('/book', methods=["GET", "POST"])
 def edit():
     form = EditBookForm()
     books = None
@@ -75,6 +102,17 @@ def edit():
 
     return render_template("edit.html", books = books, form=form)
 
+@app.route("/book/<id>", methods = ["DELETE"])
+def bookDelete(id):
+
+    try:
+            
+        book = Book.query.get(id)
+
+        db.session.delete(book)
+        db.session.commit()
+
+        return bookSchema.jsonify(book)
 
 if __name__ == "__main__":
     app.run(host = "0.0.0.0")
