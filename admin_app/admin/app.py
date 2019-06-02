@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, url_for, redirect
+from admin.forms import LoginForm, EditBookForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
@@ -39,13 +40,48 @@ app.register_blueprint(api)
 @app.route("/")
 def index():
     
-  #  if not session.get('logged_in'):
-  #    return render_template("login.html")
-  #  else:
-  #    return render_template("home.html")
-    
   return render_template("index.html")
-  # return "hi"
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    error = None
+
+    if form.validate_on_submit():
+        
+        if(request.form['username'] == "jaqen" and request.form['password'] == "hghar"):
+            return redirect(url_for('index'))
+        else:
+            error = "Invalid username or password"
+
+    return render_template('login.html', title='Sign in', form=form, error=error)
+
+@app.route('/books')
+def books():
+    
+    books = None
+    try:
+        books = Book.query.all()
+    except Exception as e:
+            print("Failed to get books")
+            print(e)
+    
+    return render_template("books.html", books = books)
+
+@app.route('/edit', methods=["GET", "POST"])
+def edit():
+    form = EditBookForm()
+    books = None
+
+    try:
+        books = Book.query.all()
+    except Exception as e:
+            print("Failed to get books")
+            print(e)
+
+    return render_template("edit.html", books = books, form=form)
+
 
 if __name__ == "__main__":
     app.run(host = "0.0.0.0")
