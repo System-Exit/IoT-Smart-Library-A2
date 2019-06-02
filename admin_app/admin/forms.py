@@ -15,3 +15,4 @@ class EditBookForm(FlaskForm):
     author = StringField('Author', validators=[DataRequired()])
     publishedDate = DateField('Published Date', validators=[DataRequired()])
     ISBN = StringField('ISBN', validators=[DataRequired()])
+    submit = SubmitField('Submit')

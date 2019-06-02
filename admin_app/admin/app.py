@@ -36,14 +36,7 @@ app.register_blueprint(api)
 #site = Blueprint("site", __name__, template_folder='templates', static_folder='static')
 
 
-
-@app.route("/")
-def index():
-    
-  return render_template("index.html")
-
-
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     error = None
