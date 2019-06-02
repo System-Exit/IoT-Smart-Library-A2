@@ -52,7 +52,7 @@ def getBooks():
 def getBook(id):
     book = Book.query.get(id)
 
-    return bookSchema.jsonify(person)
+    return bookSchema.jsonify(book)
 
 # Endpoint to create new book.
 @api.route("/book", methods = ["POST"])

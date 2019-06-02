@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
+import sqlalchemy, pymysql
 from app.flask_api import api, db
 #from app import site
 
@@ -29,6 +30,10 @@ SQLALCHEMY_DATABASE_URI = (
         user=USER, password=PASSWORD, host=HOST, 
         database=DATABASE, instance_name=INSTANCE_NAME
     )
+
+print()
+
+
 
 # database_path = "mysql+pymysql://{}:{}@/{}?unix_socket=/cloudsql/{}".format(USER, PASSWORD, DATABASE, INSTANCE_NAME)
 # 'mysql+pymysql://root:root@35.244.115.76/Library?unix_socket=/cloudsql/coral-silicon-242307:australia-southeast1:masterpi'
