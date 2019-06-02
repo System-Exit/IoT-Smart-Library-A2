@@ -44,8 +44,8 @@ def index():
   #  else:
   #    return render_template("home.html")
     
-  #  return render_template("home.html")
-  return "hi"
+  return render_template("index.html")
+  # return "hi"
 
 if __name__ == "__main__":
     app.run(host = "0.0.0.0")
