@@ -46,14 +46,16 @@ def index():
 @app.route('/books', methods=['GET'])
 def books():
     
+    form = EditBookForm()
     books = None
+    
     try:
         books = Book.query.all()
     except Exception as e:
             print("Failed to get books")
             print(e)
     
-    return render_template("books.html", books = books)
+    return render_template("books.html", books = books, form=form)
 
 # Endpoint to get book by id.
 @app.route("/book/<int:id>", methods = ["GET"])
@@ -65,9 +67,10 @@ def getBook(id):
 @api.route("/book", methods = ["POST"])
 def addBook():
 
+    form = EditBookForm()
+    
     if request.method == 'POST' and form.vaidate():
                 
-        form = EditBookForm()
 
         bookID = form.BookID.data
         Title = form.Title.data
