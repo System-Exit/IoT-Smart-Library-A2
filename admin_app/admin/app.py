@@ -43,34 +43,23 @@ def index():
 
     return render_template('login.html', title='Sign in', form=form, error=error)
 
-@app.route('/books', methods=['GET'])
+@app.route('/books', methods=['GET', 'POST'])
 def books():
     
     form = EditBookForm()
     books = None
-    
-    try:
-        books = Book.query.all()
-    except Exception as e:
-            print("Failed to get books")
-            print(e)
-    
-    return render_template("books.html", books = books, form=form)
 
-# Endpoint to get book by id.
-@app.route("/book/<int:id>", methods = ["GET"])
-def getBook(id):
-    book = Book.query.get(id)
+    if request.method == 'GET':
+        
+        try:
+                books = Book.query.all()
+        except Exception as e:
+                print("Failed to get books")
+                print(e)
+        
+        return render_template("books.html", books = books, form=form)
 
-    return bookSchema.jsonify(book)
-
-@app.route("/book", methods = ["POST"])
-def addBook():
-
-    form = EditBookForm()
-    
-    if request.method == 'POST' and form.vaidate():
-                
+    elif request.method == 'POST' and form.vaidate():
 
         bookID = form.BookID.data
         Title = form.Title.data
@@ -83,20 +72,48 @@ def addBook():
         db.session.add(newBook)
         db.session.commit()
 
-        return bookSchema.jsonify(newBook)
+        return render_template("books.html", books = books, form=form)  
 
-@app.route('/book', methods=["GET"])
-def edit():
-    form = EditBookForm()
-    books = None
+# Endpoint to get book by id.
+@app.route("/book/<int:id>", methods = ["GET"])
+def getBook(id):
+    book = Book.query.get(id)
 
-    try:
-        books = Book.query.all()
-    except Exception as e:
-            print("Failed to get books")
-            print(e)
+    return bookSchema.jsonify(book)
 
-    return render_template("edit.html", books = books, form=form)
+#@app.route("/book", methods = ['POST'])
+#def addBook():
+#
+#    form = EditBookForm()
+#    
+#    if request.method == 'POST' and form.vaidate():
+#                
+#
+#       bookID = form.BookID.data
+#        Title = form.Title.data
+#        Author = form.Author.data
+#        PublishedDate = form.PublishedDate.data
+#        ISBN = form.ISBN.data
+#
+#        newBook = Book(BookID = bookID, Title = Title, Author = Author, PublishedDate = PublishedDate, ISBN=ISBN)
+#
+#        db.session.add(newBook)
+#        db.session.commit()
+#
+#        return bookSchema.jsonify(newBook)
+
+#@app.route('/book', methods=["GET"])
+#def edit():
+#    form = EditBookForm()
+#   books = None
+#
+#    try:
+#        books = Book.query.all()
+#    except Exception as e:
+#            print("Failed to get books")
+#            print(e)
+#
+#    return render_template("edit.html", books = books, form=form)
 
 @app.route("/book/<id>", methods = ["DELETE"])
 def bookDelete(id):
