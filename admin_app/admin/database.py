@@ -34,14 +34,14 @@ class Book(db.Model):
     BookID = db.Column(db.Integer, primary_key = True, autoincrement = True)
     Title = db.Column(db.Text, nullable = False)
     Author = db.Column(db.Text, nullable = False)
-    PublisherDate = db.Column(db.Date, nullable = False)    
+    PublishedDate = db.Column(db.Date, nullable = False)    
     ISBN = db.Column(db.Text, nullable=False)
 
-    def __init__(self, BookID, Title, Author, PublisherDate, ISBN):
+    def __init__(self, BookID, Title, Author, PublishedDate, ISBN):
         self.BookID = BookID
         self.Title = Title
         self.Author = Author
-        self.PublisherDate = PublisherDate
+        self.PublishedDate = PublishedDate
         self.ISBN = ISBN
 
 class BookSchema(ma.Schema):
@@ -51,7 +51,7 @@ class BookSchema(ma.Schema):
     
     class Meta:
         # Fields to expose.
-        fields = ("BookID", "Title", "Author", "PubisherDate", "ISBN")
+        fields = ("BookID", "Title", "Author", "PubishedDate", "ISBN")
 
 bookSchema = BookSchema()
 bookSchema = BookSchema(many = True)

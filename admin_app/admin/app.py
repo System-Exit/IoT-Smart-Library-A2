@@ -64,7 +64,7 @@ def getBook(id):
 
     return bookSchema.jsonify(book)
 
-@api.route("/book", methods = ["POST"])
+@app.route("/book", methods = ["POST"])
 def addBook():
 
     form = EditBookForm()
@@ -75,17 +75,17 @@ def addBook():
         bookID = form.BookID.data
         Title = form.Title.data
         Author = form.Author.data
-        PublisherDate = form.PublisherDate.data
+        PublishedDate = form.PublishedDate.data
         ISBN = form.ISBN.data
 
-        newBook = Book(BookID = bookID, Title = Title, Author = Author, PublisherDate = PublisherDate, ISBN=ISBN)
+        newBook = Book(BookID = bookID, Title = Title, Author = Author, PublishedDate = PublishedDate, ISBN=ISBN)
 
         db.session.add(newBook)
         db.session.commit()
 
         return bookSchema.jsonify(newBook)
 
-@app.route('/book', methods=["GET", "POST"])
+@app.route('/book', methods=["GET"])
 def edit():
     form = EditBookForm()
     books = None
