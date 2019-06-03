@@ -46,32 +46,34 @@ def index():
 @app.route('/books', methods=['GET', 'POST'])
 def books():
     
-    form = EditBookForm()
-    books = None
+        form = EditBookForm()
+        books = None
 
-    if request.method == 'GET':
-        
-        try:
-                books = Book.query.all()
-        except Exception as e:
-                print("Failed to get books")
-                print(e)
-        
+        if request.method == 'GET':
+
+                try:
+                        books = Book.query.all()
+                except Exception as e:
+                        print("Failed to get books")
+                        print(e)
+
         return render_template("books.html", books = books, form=form)
 
-    elif request.method == 'POST' and form.validate_on_submit():
+        elif request.method == 'POST' and form.validate_on_submit():
 
-        bookID = form.BookID.data
-        Title = form.Title.data
-        Author = form.Author.data
-        PublishedDate = form.PublishedDate.data
-        ISBN = form.ISBN.data
+                bookID = form.BookID.data
+                Title = form.Title.data
+                Author = form.Author.data
+                PublishedDate = form.PublishedDate.data
+                ISBN = form.ISBN.data
 
-        newBook = Book(BookID = bookID, Title = Title, Author = Author, PublishedDate = PublishedDate, ISBN=ISBN)
+                newBook = Book(BookID = bookID, Title = Title, Author = Author, PublishedDate = PublishedDate, ISBN=ISBN)
 
-        db.session.add(newBook)
-        db.session.commit()
+                db.session.add(newBook)
+                db.session.commit()
 
+                return render_template("books.html", books = books, form=form)  
+        
         return render_template("books.html", books = books, form=form)  
 
 # Endpoint to get book by id.
