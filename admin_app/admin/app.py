@@ -59,7 +59,7 @@ def books():
         
         return render_template("books.html", books = books, form=form)
 
-    elif request.method == 'POST' and form.vaidate():
+    elif request.method == 'POST' and form.validate_on_submit():
 
         bookID = form.BookID.data
         Title = form.Title.data
