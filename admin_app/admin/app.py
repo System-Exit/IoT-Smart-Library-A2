@@ -57,7 +57,7 @@ def books():
                         print("Failed to get books")
                         print(e)
 
-        return render_template("books.html", books = books, form=form)
+                return render_template("books.html", books = books, form=form)
 
         elif request.method == 'POST' and form.validate_on_submit():
 
