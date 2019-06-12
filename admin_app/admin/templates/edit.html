@@ -7,25 +7,25 @@
         {{ form.hidden_tag() }}
         
         <p>
-          {{ form.title.label }}<br>
-          {{ form.title(size=32) }}<br>
-          {% for error in form.title.errors %}
+          {{ form.Title.label }}<br>
+          {{ form.Title(size=32) }}<br>
+          {% for error in form.Title.errors %}
           <span style = "color: red;"> [{{ error }}] </span>
           {% endfor %}
         </p>
 
         <p>
-            {{ form.author.label }}<br>
-            {{ form.author(size=32) }}<br>
-            {% for error in form.author.errors %}
+            {{ form.Author.label }}<br>
+            {{ form.Author(size=32) }}<br>
+            {% for error in form.Author.errors %}
             <span style = "color: red;"> [{{ error }}] </span>
             {% endfor %}
         </p>
 
         <p>
-          {{ form.publishedDate.label }}<br>
-          {{ form.publishedDate(size=32) }}<br>
-          {% for error in form.publishedDate.errors %}
+          {{ form.PublishedDate.label }}<br>
+          {{ form.PublishedDate(size=32) }}<br>
+          {% for error in form.PublishedDate.errors %}
           <span style = "color: red;"> [{{ error }}] </span>
           {% endfor %}
         </p>
