@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, session, abort, Blueprint
+from flask import render_template, redirect, request, url_for, session, abort, Blueprint, session
 from admin.forms import LoginForm, EditBookForm
 from flask_sqlalchemy import SQLAlchemy
 from flask import current_app as app
@@ -15,7 +15,9 @@ def index():
     
     #response = requests.get("http://127.0.0.1:5000/api/book")
     #data = json.loads(response.text)
-
+    if session['Logged_In'] != True:
+      return redirect('login')
+  
     return render_template("index.html")
 
 @site.route('/login')
@@ -27,6 +29,7 @@ def login():
     if form.validate_on_submit():
         
         if(request.form['username'] == "jaqen" and request.form['password'] == "hghar"):
+            session['Logged_In'] = True
             return render_template('index.html')
         else:
             error = "Invalid username or password"
@@ -36,6 +39,9 @@ def login():
 @site.route('/books', methods=['GET'])
 def books():
   
+  if session['Logged_In'] != True:
+      return redirect('login')
+    
   form = EditBookForm()
   
   #Call api endpoint to query database
@@ -87,4 +93,8 @@ def delete():
 
 @site.route('/report')
 def report():
+
+  if session['Logged_In'] != True:
+      return redirect('login')
+      
   return render_template('report.html')
