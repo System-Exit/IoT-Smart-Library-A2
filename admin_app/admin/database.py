@@ -55,3 +55,30 @@ class BookSchema(ma.Schema):
 
 bookSchema = BookSchema()
 bookSchema = BookSchema(many = True)
+
+class User(db.model):
+    
+    __tablename__ = "User"
+
+    UserID = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    UserName = db.Column(db.Text, nullble = False)
+    FName = db.Column(db.Test, nullable = False) 
+    LName = db.Column(d..Text, nullable = False)
+
+    def __init__(self, UserID, UserName, FName, LName):
+        self.UserID = UserID
+        self.UserName = UserName
+        self.FName = FName
+        self.LName = LName
+
+class UserSchema(ma.Schema):
+    # Reference: https://github.com/marshmallow-code/marshmallow/issues/377#issuecomment-261628415
+    def __init__(self, strict = True, **kwargs):
+        super().__init__(strict = strict, **kwargs)
+    
+    class Meta:
+        # Fields to expose.
+        fields = ("UserID", "UserName", "FName", "LNAme")
+
+userSchema = Userchema()
+userSchema = UserSchema(many = True)
