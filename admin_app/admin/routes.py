@@ -84,3 +84,7 @@ def delete():
   data = json.loads(response.text)
 
   return redirect("/")
+
+@site.route('/report')
+def report():
+  render_template('report.html')
