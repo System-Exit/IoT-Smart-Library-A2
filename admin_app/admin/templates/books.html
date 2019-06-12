@@ -41,16 +41,15 @@
         <p> {{ form.submit() }} </p>
       </form>
 
-      {% if books!=none%}
       <body>
-        <div class="container">
+          <div class="container">
             <div class="table-wrapper">
                 <div class="table-title">
                     <div class="row">
                         <h2>Books</h2>
                     </div>
                 </div>
-    
+                
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -60,6 +59,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                    {% if books!=none%}
                         {% for book in books %}
                             <tr>
                                 <td>{{ book.BookID }}</td>
@@ -73,6 +73,7 @@
                             </tr>
                         {% endfor %}
                     </tbody>
+                    {% endif%}
                 </table>
     
                 <div class="table-title">
@@ -81,9 +82,10 @@
                         <form action="/add" method="post">
                             <div class="form-group">
                                 <label form="Book">Book</label>
+                                <input type="int" class="form-control" id="title" name="BookID" placeholder="Enter BookID" />
                                 <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title" />
                                 <input type="text" class="form-control" id="author" name="author" placeholder="Enter Author" />
-                                <input type="text" class="form-control" id="publishedDate" name="publishedDate" placeholder="Enter published Date" />
+                                <input type="date" class="form-control" id="publishedDate" name="publishedDate" placeholder="Enter published Date" />
                                 <input type="text" class="form-control" id="ISBN" name="ISBN" placeholder="Enter ISBN" />
                             </div>
                             <button type="submit" class="btn btn-success">Add</button>
@@ -93,7 +95,6 @@
             </div>
         </div>
     </body>
-    {% endif%}
 
 {% endblock %}
 
