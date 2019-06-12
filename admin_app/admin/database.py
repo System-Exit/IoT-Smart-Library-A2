@@ -51,7 +51,7 @@ class BookSchema(ma.Schema):
     
     class Meta:
         # Fields to expose.
-        fields = ("BookID", "Title", "Author", "PubishedDate", "ISBN")
+        fields = ("BookID", "Title", "Author", "ISBN")
 
 bookSchema = BookSchema()
 bookSchema = BookSchema(many = True)
