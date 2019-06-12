@@ -87,4 +87,4 @@ def delete():
 
 @site.route('/report')
 def report():
-  render_template('report.html')
+  return render_template('report.html')
