@@ -7,25 +7,25 @@
         {{ form.hidden_tag() }}
         
         <p>
-          {{ form.Title.label }}<br>
-          {{ form.Title(size=32) }}<br>
-          {% for error in form.Title.errors %}
+          {{ form.title.label }}<br>
+          {{ form.title(size=32) }}<br>
+          {% for error in form.title.errors %}
           <span style = "color: red;"> [{{ error }}] </span>
           {% endfor %}
         </p>
 
         <p>
-            {{ form.Author.label }}<br>
-            {{ form.Author(size=32) }}<br>
-            {% for error in form.Author.errors %}
+            {{ form.author.label }}<br>
+            {{ form.author(size=32) }}<br>
+            {% for error in form.author.errors %}
             <span style = "color: red;"> [{{ error }}] </span>
             {% endfor %}
         </p>
 
         <p>
-          {{ form.PublishedDate.label }}<br>
-          {{ form.PublishedDate(size=32) }}<br>
-          {% for error in form.PublishedDate.errors %}
+          {{ form.publishedDate.label }}<br>
+          {{ form.publishedDate(size=32) }}<br>
+          {% for error in form.publishedDate.errors %}
           <span style = "color: red;"> [{{ error }}] </span>
           {% endfor %}
         </p>
@@ -69,22 +69,3 @@
       {% endif%}
     </body>
 {% endblock %}
-
-{% extends "layout.html" %}
-  
-{% block content %}
-  <h1>Books</h1> 
-
-  {% if books!=none%}
-  <table>
-    {% for book in books %}
-      <tr>
-        <td>
-          {{book.title}} 
-        </td>
-    {% endfor %}
-    
-  {% endif%}
-
-{% endblock %}
-

@@ -11,9 +11,9 @@ class LoginForm(FlaskForm):
 # Create a form to interact with the database
 
 class EditBookForm(FlaskForm):
-    BookID = StringField('Book ID', validators=[DataRequired()])
-    Title = StringField('Title', validators=[DataRequired()])
-    Author = StringField('Author', validators=[DataRequired()])
-    PublishedDate = DateField('Published Date', validators=[DataRequired()])
+    bookID = StringField('Book ID', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired()])
+    author = StringField('Author', validators=[DataRequired()])
+    publishedDate = DateField('Published Date', validators=[DataRequired()])
     ISBN = StringField('ISBN', validators=[DataRequired()])
     submit = SubmitField('Submit')

@@ -50,17 +50,17 @@ def add():
   
   form = EditBookForm()
   #Take data from from, post via api endpoint
-  bookID = form.BookID.data
-  Title = form.Title.data
-  Author = form.Author.data
-  PublishedDate = form.PublishedDate.data
+  bookID = form.bookID.data
+  title = form.title.data
+  author = form.author.data
+  publishedDate = form.publishedDate.data
   ISBN = form.ISBN.data
 
   data = {
         "BookID": bookID,
-        "Title": Title,
-        "Author": Author,
-        "PublishedDate": PublishedDate,
+        "Title": title,
+        "Author": author,
+        "PublishedDate": publishedDate,
         "ISBN": ISBN
         
     }
