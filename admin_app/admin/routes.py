@@ -43,7 +43,7 @@ def books():
   data = json.loads(response.text)
 
 
-  return render_template(books.html, books=data, form=form)
+  return render_template('books.html', books=data, form=form)
 
 @site.route('/books', methods=['POST'])
 def add():
