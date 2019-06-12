@@ -7,6 +7,13 @@
         {{ form.hidden_tag() }}
         
         <p>
+          {{ form.bookID.label }}<br>
+          {{ form.bookID(size=32) }}<br>
+          {% for error in form.bookID.errors %}
+          <span style = "color: red;"> [{{ error }}] </span>
+          {% endfor %}
+       </p>
+        <p>
           {{ form.title.label }}<br>
           {{ form.title(size=32) }}<br>
           {% for error in form.title.errors %}
