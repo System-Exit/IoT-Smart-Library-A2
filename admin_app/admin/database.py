@@ -10,16 +10,16 @@ ma = Marshmallow()
 
 def create_app(app):
     
-    HOST = '35.244.115.76'
-    USER = 'root'
-    PASSWORD = 'root'
-    DATABASE = 'Library'
+    #HOST = '35.244.115.76'
+    #USER = 'root'
+    #PASSWORD = 'root'
+    #DATABASE = 'Library'
 
     # Database information for Daniels Cloud SQL
-    #HOST = "35.244.106.216"
-    #USER = "masterpi"
-    #PASSWORD = "ipretsam"
-    #DATABASE = "Library"
+    HOST = "35.244.106.216"
+    USER = "masterpi"
+    PASSWORD = "ipretsam"
+    DATABASE = "Library"
     # database_path = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}/{}'.format(USER, PASSWORD, HOST, DATABASE)
