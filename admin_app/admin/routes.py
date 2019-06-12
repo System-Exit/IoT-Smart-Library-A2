@@ -74,7 +74,7 @@ def add():
 
   return redirect("/books")
 
-@site.route('/delete')
+@site.route('/books', methods=['DELETE'])
 def delete():
 
   #Get Title of book to delete
