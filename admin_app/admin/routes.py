@@ -1,7 +1,7 @@
 from flask import render_template, redirect, request, url_for, session, abort, Blueprint
 from admin.forms import LoginForm, EditBookForm
 from flask_sqlalchemy import SQLAlchemy
-import app
+from flask import current_app as app
 import json, requests
 #from app import site
 # db = SQLAlchemy(app)
@@ -9,14 +9,14 @@ site = Blueprint("site", __name__)
 #Contains all the routes for the application split into methods
 
 @site.route('/')
-@site.route('index')
+@site.route('/index')
 def index():
     #USE API endpoints
     
-    response = requests.get("http://127.0.0.1:5000/api/book")
-    data = json.loads(response.text)
+    #response = requests.get("http://127.0.0.1:5000/api/book")
+    #data = json.loads(response.text)
 
-    return render_template("index.html", people = data)
+    return render_template("index.html")
 
 @site.route('/login')
 def login():
