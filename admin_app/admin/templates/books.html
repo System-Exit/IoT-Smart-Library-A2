@@ -41,31 +41,58 @@
         <p> {{ form.submit() }} </p>
       </form>
 
-      <h1>Current Books</h1>
-
       {% if books!=none%}
-        <table>
-          {% for book in books %}
-            <tr>
-              <td>
-                {{ book.Title }} 
-              </td>
-              <td>
-                <form method="POST" action="./update" style="display: inline">
-                  <input type="hidden" value="{{book.title}}" name="oldtitle">
-                  <input type="text" value="{{book.title}}" name="newtitle">
-                  <input type="submit" value="Update">
-                </form>
-              </td>
-              <td>
-                <form method="POST" action="./delete" style="display: inline">
-                  <input type="hidden" value="{{book.title}}" name="title">
-                  <input type="submit" value="Delete">
-                </form>
-              </td>
-            </tr>
-            {% endfor %}
-        </table>
-      {% endif%}
+      <body>
+        <div class="container">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <h2>Books</h2>
+                    </div>
+                </div>
+    
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Person ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books %}
+                            <tr>
+                                <td>{{ book.BookID }}</td>
+                                <td>{{ book.Title }}</td>
+                                <td>
+                                    <form action="/delete" method="post">
+                                        <input type="hidden" name="personID" value="{{ person.PersonID }}" />
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+    
+                <div class="table-title">
+                    <div class="row">
+                        <h3>Add Book</h3>
+                        <form action="/add" method="post">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" />
+                            </div>
+                            <button type="submit" class="btn btn-success">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
+      {% endif%}
+
 {% endblock %}
+
+
+
