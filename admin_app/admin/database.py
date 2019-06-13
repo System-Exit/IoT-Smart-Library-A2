@@ -56,14 +56,14 @@ class BookSchema(ma.Schema):
 bookSchema = BookSchema()
 bookSchema = BookSchema(many = True)
 
-class User(db.model):
+class User(db.Model):
     
     __tablename__ = "User"
 
     UserID = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    UserName = db.Column(db.Text, nullble = False)
-    FName = db.Column(db.Test, nullable = False) 
-    LName = db.Column(d..Text, nullable = False)
+    UserName = db.Column(db.Text, nullable = False)
+    FName = db.Column(db.Text, nullable = False) 
+    LName = db.Column(db.Text, nullable = False)
 
     def __init__(self, UserID, UserName, FName, LName):
         self.UserID = UserID
@@ -78,7 +78,7 @@ class UserSchema(ma.Schema):
     
     class Meta:
         # Fields to expose.
-        fields = ("UserID", "UserName", "FName", "LNAme")
+        fields = ("UserID", "UserName", "FName", "LName")
 
-userSchema = Userchema()
+userSchema = UserSchema()
 userSchema = UserSchema(many = True)

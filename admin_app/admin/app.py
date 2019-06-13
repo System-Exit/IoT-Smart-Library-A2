@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
 import sqlalchemy, pymysql
-from admin.database import create_app, Book, bookSchema, db
+from admin.database import create_app, Book, bookSchema, db, User, userSchema
 from admin.flask_api import api
 from admin.routes import site
 from admin.config import Config

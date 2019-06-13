@@ -15,8 +15,6 @@ def index():
     
     #response = requests.get("http://127.0.0.1:5000/api/book")
     #data = json.loads(response.text)
-    if session['Logged_In'] != True:
-      return redirect('login')
   
     return render_template("index.html")
 
@@ -29,7 +27,6 @@ def login():
     if form.validate_on_submit():
         
         if(request.form['username'] == "jaqen" and request.form['password'] == "hghar"):
-            session['Logged_In'] = True
             return render_template('index.html')
         else:
             error = "Invalid username or password"
@@ -39,8 +36,6 @@ def login():
 @site.route('/books', methods=['GET'])
 def books():
   
-  if session['Logged_In'] != True:
-      return redirect('login')
     
   form = EditBookForm()
   
@@ -94,7 +89,5 @@ def delete():
 @site.route('/report')
 def report():
 
-  if session['Logged_In'] != True:
-      return redirect('login')
       
   return render_template('report.html')
